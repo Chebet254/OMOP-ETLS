@@ -10,9 +10,9 @@ library(haven)
 
 #set wd
 #alpha_metadata <- read_dta("alpha_metadata.dta")%>% as_factor()
-hiv_tests <-  read_dta("D:/APHRC/LHS project/Kisesa datasets/hiv_tests_Kisesa.dta")#%>% as_factor()
+hiv_tests <-  read_dta("D:/APHRC/LHS project/Kisesa datasets/hiv_tests_Kisesa.dta") %>% as_factor()
 #write.csv(hiv_tests, file = "D:/APHRC/LHS project/Kisesa datasets/HIV_test_csv.csv")
-residency_kisesa <- read_dta("D:/APHRC/LHS project/Kisesa datasets/residency_Kisesa.dta")#%>% as_factor()
+residency_kisesa <- read_dta("D:/APHRC/LHS project/Kisesa datasets/residency_Kisesa.dta") %>% as_factor()
 
 #calculating dob- days since 1960 
 #add start date column

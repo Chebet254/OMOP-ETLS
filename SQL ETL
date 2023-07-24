@@ -1,6 +1,6 @@
-DROP TABLE residencies 
+DROP TABLE CDM.residencies 
 --CREATE RESIDENCIES TABLE 
-CREATE TABLE Residencies (
+CREATE TABLE CDM.Residencies (
   	idno BIGINT not NULL,
 	sex VARCHAR,
 	bdate VARCHAR,
@@ -17,22 +17,20 @@ CREATE TABLE Residencies (
 DELETE FROM Residencies
 
 --2.	INSERT DATA TO RESIDENCIES TABLE 
-COPY Residencies
+COPY CDM.Residencies
 FROM 'D:\APHRC\LHS\OMOP ETL\KISESA DATASETS-20230324T073138Z-001\KISESA DATASETS\Residency_csv.csv'
 DELIMITER ','
 CSV HEADER
 NULL 'NA';
 
 --CREATE PERSON TABLE & INSERT DATA
-
-
-
-CREATE SEQUENCE cdmperson_id_seq;
+DROP TABLE CDM.person
+CREATE SEQUENCE cdm.person_id_seq;
 CREATE TABLE IF NOT EXISTS CDM.person
 (
-person_id integer NOT NULL,
+person_id bigint NOT NULL,
 gender_concept_id character varying(4) NOT NULL,
-year_of_birth double precision NOT NULL,
+year_of_birth double precision,
 month_of_birth double precision,
 day_of_birth double precision,
 birth_datetime timestamp without time zone,
@@ -42,8 +40,8 @@ ethnicity_concept_id double precision NOT NULL,
 location_id double precision,
 provider_id double precision,
 care_site_id double precision,
-person_source_value integer,
-gender_source_value smallint,
+person_source_value bigint,
+gender_source_value bigint,
 gender_source_concept_id double precision NOT NULL,
 race_source_value text,
 race_source_concept_id double precision NOT NULL,
@@ -51,7 +49,7 @@ ethnicity_source_value character varying(200),
 ethnicity_source_concept_id double precision NOT NULL,
 CONSTRAINT person_pkey PRIMARY KEY (person_id));
 
-INSERT INTO cdmperson
+INSERT INTO cdm.person
 (
 person_id,
 gender_concept_id,
@@ -75,33 +73,33 @@ ethnicity_source_concept_id
 )
 SELECT
 DISTINCT ON (idno)
-NEXTVAL('cdmperson_id_seq') AS person_id,
-CASE WHEN residencies.sex::int = 1 THEN 8507
- WHEN residencies.sex::int = 2 THEN 8532
- WHEN residencies.sex::int = 9 THEN 0
+NEXTVAL('cdm.person_id_seq') AS person_id,
+CASE WHEN CDM.residencies.sex::int = 1 THEN 8507
+ WHEN CDM.residencies.sex::int = 2 THEN 8532
+ WHEN CDM.residencies.sex::int = 9 THEN 0
  ELSE 0
 END AS gender_concept_id,
-EXTRACT (YEAR FROM residencies.dob:: DATE) AS year_of_birth,
-EXTRACT(MONTH FROM residencies.dob:: DATE) AS month_of_birth,
-EXTRACT(DAY FROM residencies.dob:: DATE) AS day_of_birth,
-residencies.dob:: DATE AS birth_datetime,
-CASE WHEN residencies.exit_type = 'Death'
- THEN residencies.exit_date:: DATE
+EXTRACT (YEAR FROM CDM.residencies.dob:: DATE) AS year_of_birth,
+EXTRACT(MONTH FROM CDM.residencies.dob:: DATE) AS month_of_birth,
+EXTRACT(DAY FROM CDM.residencies.dob:: DATE) AS day_of_birth,
+CDM.residencies.dob:: DATE AS birth_datetime,
+CASE WHEN CDM.residencies.exit_type = 'Death'
+ THEN CDM.residencies.exit_date:: DATE
  ELSE NULL
 END AS death_datetime,
 38003600 AS race_concept_id,
 38003564 AS ethnicity_concept_id,
-CAST(residencies.hhold_id AS BIGINT) AS location_id,
+CAST(CDM.residencies.hhold_id AS BIGINT) AS location_id,
 NULL AS provider_id,
 NULL AS care_site_id,
-CAST(residencies.idno AS BIGINT) AS person_source_value,
-residencies.sex::int AS gender_source_value,
+CAST(CDM.residencies.idno AS BIGINT) AS person_source_value,
+CDM.residencies.sex::int AS gender_source_value,
 0 AS gender_source_concept_id,
 NULL AS race_source_value,
 0 AS race_source_concept_id,
 NULL AS ethnicity_source_value,
 0 AS ethnicity_source_concept_id
-FROM residencies
+FROM CDM.residencies
 ORDER BY idno, entry_date DESC;
 
 --obs period

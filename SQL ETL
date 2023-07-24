@@ -18,29 +18,38 @@ DELETE FROM Residencies
 
 --2.	INSERT DATA TO RESIDENCIES TABLE 
 COPY Residencies
-FROM 'D:\APHRC\LHS project\Kisesa datasets\Residency_csv.csv'
+FROM 'D:\APHRC\LHS\OMOP ETL\KISESA DATASETS-20230324T073138Z-001\KISESA DATASETS\Residency_csv.csv'
 DELIMITER ','
 CSV HEADER
 NULL 'NA';
+
 --CREATE PERSON TABLE & INSERT DATA
-DROP TABLE cdmperson
-DROP TABLE cdmobservation
-DROP TABLE CONDITION_OCCURRENCE
-DROP TABLE location_history
-DROP TABLE observation_period
-DROP TABLE survey_conduct
-DROP TABLE visit_occurrence
 
-DELETE FROM cdmperson
-DELETE FROM cdmobservation
-DELETE FROM CONDITION_OCCURRENCE
-DELETE FROM location_history
-DELETE FROM observation_period
-DELETE FROM survey_conduct
-DELETE FROM visit_occurrence
 
-DROP SEQUENCE cdmperson_id_seq;
+
 CREATE SEQUENCE cdmperson_id_seq;
+CREATE TABLE IF NOT EXISTS CDM.person
+(
+person_id integer NOT NULL,
+gender_concept_id character varying(4) NOT NULL,
+year_of_birth double precision NOT NULL,
+month_of_birth double precision,
+day_of_birth double precision,
+birth_datetime timestamp without time zone,
+death_datetime timestamp without time zone,
+race_concept_id double precision NOT NULL,
+ethnicity_concept_id double precision NOT NULL,
+location_id double precision,
+provider_id double precision,
+care_site_id double precision,
+person_source_value integer,
+gender_source_value smallint,
+gender_source_concept_id double precision NOT NULL,
+race_source_value text,
+race_source_concept_id double precision NOT NULL,
+ethnicity_source_value character varying(200),
+ethnicity_source_concept_id double precision NOT NULL,
+CONSTRAINT person_pkey PRIMARY KEY (person_id));
 
 INSERT INTO cdmperson
 (

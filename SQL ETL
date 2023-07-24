@@ -102,11 +102,20 @@ NULL AS ethnicity_source_value,
 FROM CDM.residencies
 ORDER BY idno, entry_date DESC;
 
---obs period
-DROP SEQUENCE observation_period_id_seq;
-CREATE SEQUENCE observation_period_id_seq;
+--create table obs period
+DROP TABLE CDM.OBSERVATION_PERIOD
+CREATE SEQUENCE cdm.observation_period_id_seq;
+CREATE TABLE IF NOT EXISTS cdm.observation_period
+(
+observation_period_id bigint NOT NULL,
+person_id bigint NOT NULL,
+observation_period_start_date date,
+observation_period_end_date date,
+period_type_concept_id integer,
+CONSTRAINT xpk_observation_period PRIMARY KEY (observation_period_id));
 
-INSERT INTO observation_period
+
+INSERT INTO cdm.observation_period
 (
  observation_period_id,
 person_id,
@@ -115,14 +124,14 @@ observation_period_start_date,
  period_type_concept_id
 )
 SELECT
- NEXTVAL('observation_period_id_seq') AS observation_period_id,
- cdmperson.person_id AS person_id,
- residencies.entry_date AS observation_period_start_date,
- residencies.exit_date::DATE AS observation_period_end_date,
+ NEXTVAL('cdm.observation_period_id_seq') AS observation_period_id,
+ cdm.person.person_id AS person_id,
+ cdm.residencies.entry_date::DATE AS observation_period_start_date,
+ cdm.residencies.exit_date::DATE AS observation_period_end_date,
  44814723 AS period_type_concept_id
-FROM residencies
-INNER JOIN cdmperson
-ON CAST(cdmperson.person_source_value AS BIGINT) = CAST(residencies.idno AS BIGINT);
+FROM cdm.residencies
+INNER JOIN cdm.person
+ON CAST(cdm.person.person_source_value AS BIGINT) = CAST(cdm.residencies.idno AS BIGINT);
 
 
 --VISIT OCCURRENCE

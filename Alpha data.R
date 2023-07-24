@@ -10,9 +10,9 @@ library(haven)
 
 #set wd
 #alpha_metadata <- read_dta("alpha_metadata.dta")%>% as_factor()
-hiv_tests <-  read_dta("D:/APHRC/LHS project/Kisesa datasets/hiv_tests_Kisesa.dta") %>% as_factor()
+hiv_tests <-  read_dta("hiv_tests_Kisesa.dta") %>% as_factor()
 #write.csv(hiv_tests, file = "D:/APHRC/LHS project/Kisesa datasets/HIV_test_csv.csv")
-residency_kisesa <- read_dta("D:/APHRC/LHS project/Kisesa datasets/residency_Kisesa.dta") %>% as_factor()
+residency_kisesa <- read_dta("residency_Kisesa.dta") %>% as_factor()
 
 #calculating dob- days since 1960 
 #add start date column
@@ -21,7 +21,7 @@ colnames(residency_kisesa)[3] = "bdate"
 residency_kisesa <- within(residency_kisesa, {
   #start_date <- start_date
 dob <- start_date + residency_kisesa$bdate })
-#write.csv(residency_kisesa, file = "D:/APHRC/LHS project/Kisesa datasets/Residency_csv.csv")
+#write.csv(residency_kisesa, file = "Residency.csv", row.names = FALSE)
 
 #calculate age
 end.date <- as.Date("2016/12/12")

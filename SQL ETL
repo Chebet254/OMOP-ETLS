@@ -281,7 +281,20 @@ INNER JOIN cdm.person
 ON CAST(cdm.person.person_source_value AS BIGINT) = CAST(CDM.residencies.idno AS BIGINT);
 
 --LOCATION HISTORY
-INSERT INTO location_history
+--CREATE TABLE 
+CREATE SEQUENCE cdm.location_id_seq;
+CREATE TABLE IF NOT EXISTS cdm.location_history
+(
+location_id bigint NOT NULL,
+relationship_type_concept_id bigint NOT NULL,
+domain_id character varying(50),
+entity_id bigint NOT NULL,
+start_date date NOT NULL,
+end_date date,
+CONSTRAINT xpk_location_history PRIMARY KEY (location_id)
+);
+		
+INSERT INTO cdm.location_history
 (
  location_id,
  relationship_type_concept_id,
@@ -291,17 +304,17 @@ INSERT INTO location_history
  end_date
 )
 SELECT
- NEXTVAL('location_id_seq') AS location_id,
+ NEXTVAL('cdm.location_id_seq') AS location_id,
  4049366 AS relationship_type_concept_id,
  4129409 AS domain_id,
- cdmperson.person_id AS entity_id,
- CASE WHEN residencies.entry_date IS NULL THEN '9999-12-31'
- ELSE residencies.entry_date
+ cdm.person.person_id AS entity_id,
+ CASE WHEN cdm.residencies.entry_date::DATE IS NULL THEN '9999-12-31'
+ ELSE cdm.residencies.entry_date::DATE
  END AS start_date,
- residencies.exit_date::DATE AS end_date
-FROM residencies
-INNER JOIN cdmperson
-ON CAST(cdmperson.person_source_value AS BIGINT) = CAST(residencies.idno AS BIGINT);
+ cdm.residencies.exit_date::DATE AS end_date
+FROM cdm.residencies
+INNER JOIN cdm.person
+ON CAST(cdm.person.person_source_value AS BIGINT) = CAST(cdm.residencies.idno AS BIGINT);
 
 --MAPPING HIV
 --VISIT OCCURRENCE

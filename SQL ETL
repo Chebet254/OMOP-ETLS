@@ -14,11 +14,11 @@ CREATE TABLE CDM.Residencies (
 	start_date VARCHAR,
 	dob VARCHAR)
 
-DELETE FROM Residencies
+DELETE FROM cdm.Residencies
 
 --2.	INSERT DATA TO RESIDENCIES TABLE 
 COPY CDM.Residencies
-FROM 'D:\APHRC\LHS\OMOP ETL\KISESA DATASETS-20230324T073138Z-001\KISESA DATASETS\Residency_csv.csv'
+FROM 'D:\APHRC\LHS\OMOP ETL\KISESA DATASETS-20230324T073138Z-001\KISESA DATASETS\Residency.csv'
 DELIMITER ','
 CSV HEADER
 NULL 'NA';
@@ -133,107 +133,8 @@ FROM cdm.residencies
 INNER JOIN cdm.person
 ON CAST(cdm.person.person_source_value AS BIGINT) = CAST(cdm.residencies.idno AS BIGINT);
 
-
---VISIT OCCURRENCE
-DROP  SEQUENCE visit_occurrence_id_seq;
-CREATE SEQUENCE visit_occurrence_id_seq;
-
-INSERT INTO visit_occurrence
-(
- visit_occurrence_id,
- person_id,
- visit_concept_id,
- visit_start_date,
- visit_start_datetime,
- visit_end_date,
- visit_end_datetime,
- visit_type_concept_id,
- provider_id,
- care_site_id,
-visit_source_value,
- visit_source_concept_id,
- admitting_source_concept_id,
- admitting_source_value,
- discharge_to_concept_id,
- discharge_to_source_value,
- preceding_visit_occurrence_id
-)
-SELECT
-NEXTVAL('visit_occurrence_id_seq') AS visit_occurrence_id,
-cdmperson.person_id AS person_id,
-581476 AS visit_concept_id,
-residencies.entry_date AS visit_start_date,
-CASE WHEN residencies.entry_date IS NULL THEN '9999-12-31 00:00:00'
- ELSE residencies.entry_date
-END AS visit_start_datetime,
-residencies.exit_date::DATE AS visit_end_date,
-CASE WHEN residencies.exit_date::DATE IS NULL THEN '9999-12-31 00:00:00'
- ELSE residencies.exit_date::DATE
-END AS visit_end_datetime,
-32809 AS visit_type_concept_id,
-NULL AS provider_id,
-NULL AS care_site_id,
-NULL AS visit_source_value,
-0 AS visit_source_concept_id,
-0 AS admitting_source_concept_id,
-NULL AS admitting_source_value,
-0 AS discharge_to_concept_id,
-NULL AS discharge_to_source_value,
-NULL AS preceding_visit_occurrence_id
-FROM residencies
-INNER JOIN cdmperson
-ON CAST(cdmperson.person_source_value AS BIGINT) = CAST(residencies.idno AS BIGINT); 
-
---ii)	Insert data from exit date to long format. 
-/*INSERT INTO visit_occurrence
-(visit_occurrence_id,
- person_id,
- visit_concept_id,
- visit_start_date,
- visit_start_datetime,
- visit_end_date,
- visit_end_datetime,
- visit_type_concept_id,
- provider_id,
- care_site_id,
- visit_source_value,
- visit_source_concept_id,
-admitting_source_concept_id,
- admitting_source_value,
- discharge_to_concept_id,
- discharge_to_source_value,
- preceding_visit_occurrence_id
-)
-SELECT
-NEXTVAL('visit_occurrence_id_seq') AS visit_occurrence_id,
-cdmperson.person_id AS person_id,
-581476 AS visit_concept_id,
-residencies.exit_date::DATE AS visit_start_date,
-CASE WHEN residencies.exit_date::DATE IS NULL THEN '9999-12-31 00:00:00'
- ELSE residencies.exit_date::DATE
-END AS visit_start_datetime,
-residencies.exit_date::DATE AS visit_end_date,
-CASE WHEN residencies.exit_date::DATE IS NULL THEN '9999-12-31 00:00:00'
- ELSE residencies.exit_date::DATE
-END AS visit_start_datetime,
-32809 AS visit_type_concept_id,
-NULL AS provider_id,
-NULL AS care_site_id,
-NULL AS visit_source_value,
-0 AS visit_source_concept_id,
-0 AS admitting_source_concept_id,
-NULL AS admitting_source_value,
-0 AS discharge_to_concept_id,
-NULL AS discharge_to_source_value,
-NULL AS preceding_visit_occurrence_id
-FROM residencies
-INNER JOIN cdmperson
-ON CAST(cdmperson.person_source_value AS BIGINT) = CAST(residencies.idno AS BIGINT);*/
-
---OBS TABLE
-DROP TABLE CDMOBSERVATION
 --CREATE OBS TABLE 
-CREATE TABLE IF NOT EXISTS cdmobservation
+CREATE TABLE IF NOT EXISTS cdm.observation
 (
  observation_id bigint NOT NULL,
  person_id bigint NOT NULL,
@@ -256,15 +157,12 @@ CREATE TABLE IF NOT EXISTS cdmobservation
  observation_event_id bigint,
  obs_event_field_concept_id integer NOT NULL,
  value_as_datetime timestamp without time zone,
- CONSTRAINT xpk_observation PRIMARY KEY (observation_id)
-);
+ CONSTRAINT xpk_observation PRIMARY KEY (observation_id));
+
 --CREATE SEQUENCE
-DROP SEQUENCE cdmobservation_id_seq;
-CREATE SEQUENCE cdmobservation_id_seq;
+CREATE SEQUENCE cdm.observation_id_seq;
 
-SELECT * FROM CDMOBSERVATION
-
-INSERT INTO cdmobservation
+INSERT INTO cdm.observation
 (
  observation_id,
  person_id,
@@ -289,41 +187,41 @@ value_as_number,
  value_as_datetime
 )
 SELECT
- NEXTVAL('cdmobservation_id_seq') AS observation_id,
- cdmperson.person_id AS person_id,
+ NEXTVAL('cdm.observation_id_seq') AS observation_id,
+ cdm.person.person_id AS person_id,
 4295659 AS observation_concept_id,
- residencies.entry_date::DATE AS observation_date,
- CASE WHEN residencies.entry_date::TIMESTAMP IS NULL THEN '9999-12-31 00:00:00'
- ELSE residencies.entry_date::TIMESTAMP
+ CDM.residencies.entry_date::DATE AS observation_date,
+ CASE WHEN CDM.residencies.entry_date::TIMESTAMP IS NULL THEN '9999-12-31 00:00:00'
+ ELSE CDM.residencies.entry_date::TIMESTAMP
 END AS observation_datetime,
  45905771 AS observation_type_concept_id,
  NULL AS value_as_number,
  NULL AS value_as_string,
- CASE WHEN residencies.entry_type = 'Baseline' THEN 8568
-	WHEN residencies.entry_type = 'Birth' THEN 4216316
-	WHEN residencies.entry_type = 'in-migration' THEN 45878942
+ CASE WHEN CDM.residencies.entry_type = 'Baseline' THEN 8568
+	WHEN CDM.residencies.entry_type = 'Birth' THEN 4216316
+	WHEN CDM.residencies.entry_type = 'in-migration' THEN 45878942
 ELSE 0
 END AS value_as_concept_id,
- CASE WHEN residencies.entry_type = 'in-migraration' THEN 44804024
+ CASE WHEN CDM.residencies.entry_type = 'in-migraration' THEN 44804024
  ELSE NULL
 END AS qualifier_concept_id,
  4299438 AS unit_concept_id,
  NULL AS provider_id,
  NULL AS visit_occurrence_id, -- Link it as foreign key to visit_occurence_id form the visit_occurence OMOP table
  NULL AS visit_detail_id,
-residencies.entry_type AS observation_source_value,
+CDM.residencies.entry_type AS observation_source_value,
  0 AS observation_source_concept_id,
  'Individual' AS unit_source_value,
  NULL AS qualifier_source_value,
  NULL AS observation_event_id,
  0 AS obs_event_field_concept_id,
  NULL AS value_as_datetime
-FROM residencies
-INNER JOIN cdmperson
-ON CAST(cdmperson.person_source_value AS BIGINT) = CAST(residencies.idno AS BIGINT);
+FROM CDM.residencies
+INNER JOIN cdm.person
+ON CAST(cdm.person.person_source_value AS BIGINT) = CAST(CDM.residencies.idno AS BIGINT);
 
 --ii)	Insert episode end/exit to convert to long format.
-INSERT INTO cdmobservation
+INSERT INTO cdm.observation
 (
  observation_id,
  person_id,
@@ -348,47 +246,39 @@ INSERT INTO cdmobservation
  value_as_datetime
 )
 SELECT
- NEXTVAL('cdmobservation_id_seq') AS observation_id,
- cdmperson.person_id AS person_id,
+ NEXTVAL('cdm.observation_id_seq') AS observation_id,
+ cdm.person.person_id AS person_id,
 4295659 AS observation_concept_id,
  residencies.exit_date::DATE AS observation_date,
- CASE WHEN residencies.exit_date::DATE IS NULL THEN '9999-12-31 00:00:00'
- ELSE residencies.exit_date::DATE
+ CASE WHEN CDM.residencies.exit_date::DATE IS NULL THEN '9999-12-31 00:00:00'
+ ELSE CDM.residencies.exit_date::DATE
 END AS observation_datetime,
  45905771 AS observation_type_concept_id,
  NULL AS value_as_number,
  NULL AS value_as_string,
- CASE WHEN residencies.exit_type = 'Present in study' THEN  4181412
- 	WHEN residencies.exit_type = 'Death' THEN 4306655
-	WHEN residencies.exit_type = 'out-migration' THEN 40377961
-	WHEN residencies.exit_type = 'Lost to follow up' THEN 45618458
+ CASE WHEN CDM.residencies.exit_type = 'Present in study' THEN  4181412
+ 	WHEN CDM.residencies.exit_type = 'Death' THEN 4306655
+	WHEN CDM.residencies.exit_type = 'out-migration' THEN 40377961
+	WHEN CDM.residencies.exit_type = 'Lost to follow up' THEN 45618458
 ELSE 0
 END AS value_as_concept_id,
-CASE WHEN residencies.exit_type = 'out-migration' THEN 44804024
+CASE WHEN CDM.residencies.exit_type = 'out-migration' THEN 44804024
  ELSE NULL
 END AS qualifier_concept_id,
  4299438 AS unit_concept_id,
  NULL AS provider_id,
  NULL AS visit_occurrence_id, -- Link it as foreign key to visit_occurence_id form the visit_occurence OMOP table
  NULL AS visit_detail_id,
- residencies.exit_type AS observation_source_value,
+ CDM.residencies.exit_type AS observation_source_value,
  0 AS observation_source_concept_id,
  'Individual' AS unit_source_value,
  NULL AS qualifier_source_value,
  NULL AS observation_event_id,
  0 AS obs_event_field_concept_id,
  NULL AS value_as_datetime
-FROM residencies
-INNER JOIN cdmperson
-ON CAST(cdmperson.person_source_value AS BIGINT) = CAST(residencies.idno AS BIGINT);
-
---UPDATE TABLE 
-UPDATE cdmobservation
-SET visit_occurrence_id = visit_occurrence.visit_occurrence_id
-FROM visit_occurrence
-WHERE cdmobservation.person_id = visit_occurrence.person_id
-AND cdmobservation.observation_date = visit_occurrence.visit_start_date
-AND visit_occurrence.visit_type_concept_id = 32809;
+FROM CDM.residencies
+INNER JOIN cdm.person
+ON CAST(cdm.person.person_source_value AS BIGINT) = CAST(CDM.residencies.idno AS BIGINT);
 
 --LOCATION HISTORY
 INSERT INTO location_history

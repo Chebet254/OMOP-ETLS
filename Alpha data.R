@@ -11,7 +11,7 @@ library(haven)
 #set wd
 #alpha_metadata <- read_dta("alpha_metadata.dta")%>% as_factor()
 hiv_tests <-  read_dta("hiv_tests_Kisesa.dta") %>% as_factor()
-#write.csv(hiv_tests, file = "D:/APHRC/LHS project/Kisesa datasets/HIV_test_csv.csv")
+#write.csv(hiv_tests, file = "HIV_test_csv.csv",row.names = FALSE)
 residency_kisesa <- read_dta("residency_Kisesa.dta") %>% as_factor()
 
 #calculating dob- days since 1960 

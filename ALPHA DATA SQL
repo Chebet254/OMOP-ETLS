@@ -1,0 +1,488 @@
+DROP TABLE CDM.residencies 
+--CREATE RESIDENCIES TABLE 
+CREATE TABLE CDM.Residencies (
+  	idno BIGINT not NULL,
+	sex VARCHAR,
+	bdate VARCHAR,
+	residence VARCHAR, entry_date VARCHAR,
+	exit_date VARCHAR,
+	entry_type VARCHAR,
+	exit_type VARCHAR,
+  	hhold_id BIGINT,
+  	hhold_id_extra VARCHAR,
+	study_name VARCHAR,
+	start_date VARCHAR,
+	dob VARCHAR)
+
+DELETE FROM cdm.Residencies
+
+--2.	INSERT DATA TO RESIDENCIES TABLE 
+COPY CDM.Residencies
+FROM 'D:\APHRC\LHS\OMOP ETL\KISESA DATASETS-20230324T073138Z-001\KISESA DATASETS\Residency.csv'
+DELIMITER ','
+CSV HEADER
+NULL 'NA';
+
+--CREATE PERSON TABLE & INSERT DATA
+DROP TABLE CDM.person
+CREATE SEQUENCE cdm.person_id_seq;
+CREATE TABLE IF NOT EXISTS CDM.person
+(
+person_id bigint NOT NULL,
+gender_concept_id character varying(4) NOT NULL,
+year_of_birth double precision,
+month_of_birth double precision,
+day_of_birth double precision,
+birth_datetime timestamp without time zone,
+death_datetime timestamp without time zone,
+race_concept_id double precision NOT NULL,
+ethnicity_concept_id double precision NOT NULL,
+location_id double precision,
+provider_id double precision,
+care_site_id double precision,
+person_source_value bigint,
+gender_source_value bigint,
+gender_source_concept_id double precision NOT NULL,
+race_source_value text,
+race_source_concept_id double precision NOT NULL,
+ethnicity_source_value character varying(200),
+ethnicity_source_concept_id double precision NOT NULL,
+CONSTRAINT person_pkey PRIMARY KEY (person_id));
+
+INSERT INTO cdm.person
+(
+person_id,
+gender_concept_id,
+year_of_birth,
+month_of_birth,
+day_of_birth,
+birth_datetime,
+death_datetime,
+race_concept_id,
+ethnicity_concept_id,
+location_id,
+provider_id,
+care_site_id,
+person_source_value,
+gender_source_value,
+gender_source_concept_id,
+race_source_value,
+race_source_concept_id,
+ethnicity_source_value,
+ethnicity_source_concept_id
+)
+SELECT
+DISTINCT ON (idno)
+NEXTVAL('cdm.person_id_seq') AS person_id,
+CASE WHEN CDM.residencies.sex::int = 1 THEN 8507
+ WHEN CDM.residencies.sex::int = 2 THEN 8532
+ WHEN CDM.residencies.sex::int = 9 THEN 0
+ ELSE 0
+END AS gender_concept_id,
+EXTRACT (YEAR FROM CDM.residencies.dob:: DATE) AS year_of_birth,
+EXTRACT(MONTH FROM CDM.residencies.dob:: DATE) AS month_of_birth,
+EXTRACT(DAY FROM CDM.residencies.dob:: DATE) AS day_of_birth,
+CDM.residencies.dob:: DATE AS birth_datetime,
+CASE WHEN CDM.residencies.exit_type = 'Death'
+ THEN CDM.residencies.exit_date:: DATE
+ ELSE NULL
+END AS death_datetime,
+38003600 AS race_concept_id,
+38003564 AS ethnicity_concept_id,
+CAST(CDM.residencies.hhold_id AS BIGINT) AS location_id,
+NULL AS provider_id,
+NULL AS care_site_id,
+CAST(CDM.residencies.idno AS BIGINT) AS person_source_value,
+CDM.residencies.sex::int AS gender_source_value,
+0 AS gender_source_concept_id,
+NULL AS race_source_value,
+0 AS race_source_concept_id,
+NULL AS ethnicity_source_value,
+0 AS ethnicity_source_concept_id
+FROM CDM.residencies
+ORDER BY idno, entry_date DESC;
+
+--create table obs period
+DROP TABLE CDM.OBSERVATION_PERIOD
+CREATE SEQUENCE cdm.observation_period_id_seq;
+CREATE TABLE IF NOT EXISTS cdm.observation_period
+(
+observation_period_id bigint NOT NULL,
+person_id bigint NOT NULL,
+observation_period_start_date date,
+observation_period_end_date date,
+period_type_concept_id integer,
+CONSTRAINT xpk_observation_period PRIMARY KEY (observation_period_id));
+
+
+INSERT INTO cdm.observation_period
+(
+ observation_period_id,
+person_id,
+observation_period_start_date,
+ observation_period_end_date,
+ period_type_concept_id
+)
+SELECT
+ NEXTVAL('cdm.observation_period_id_seq') AS observation_period_id,
+ cdm.person.person_id AS person_id,
+ cdm.residencies.entry_date::DATE AS observation_period_start_date,
+ cdm.residencies.exit_date::DATE AS observation_period_end_date,
+ 44814723 AS period_type_concept_id
+FROM cdm.residencies
+INNER JOIN cdm.person
+ON CAST(cdm.person.person_source_value AS BIGINT) = CAST(cdm.residencies.idno AS BIGINT);
+
+--CREATE OBS TABLE 
+CREATE TABLE IF NOT EXISTS cdm.observation
+(
+ observation_id bigint NOT NULL,
+ person_id bigint NOT NULL,
+ observation_concept_id integer NOT NULL,
+ observation_date date,
+ observation_datetime timestamp,
+ observation_type_concept_id integer NOT NULL,
+ value_as_number numeric,
+ value_as_string character varying(60),
+ value_as_concept_id integer,
+ qualifier_concept_id integer,
+ unit_concept_id integer,
+ provider_id bigint,
+ visit_occurrence_id bigint,
+ visit_detail_id bigint,
+ observation_source_value character varying(50),
+ observation_source_concept_id integer NOT NULL,
+ unit_source_value character varying(50),
+ qualifier_source_value character varying(50),
+ observation_event_id bigint,
+ obs_event_field_concept_id integer NOT NULL,
+ value_as_datetime timestamp without time zone,
+ CONSTRAINT xpk_observation PRIMARY KEY (observation_id));
+
+--CREATE SEQUENCE
+CREATE SEQUENCE cdm.observation_id_seq;
+
+INSERT INTO cdm.observation
+(
+ observation_id,
+ person_id,
+ observation_concept_id,
+ observation_date,
+ observation_datetime,
+ observation_type_concept_id,
+value_as_number,
+ value_as_string,
+ value_as_concept_id,
+ qualifier_concept_id,
+ unit_concept_id,
+ provider_id,
+ visit_occurrence_id,
+ visit_detail_id,
+ observation_source_value,
+ observation_source_concept_id,
+ unit_source_value,
+ qualifier_source_value,
+ observation_event_id,
+ obs_event_field_concept_id,
+ value_as_datetime
+)
+SELECT
+ NEXTVAL('cdm.observation_id_seq') AS observation_id,
+ cdm.person.person_id AS person_id,
+4295659 AS observation_concept_id,
+ CDM.residencies.entry_date::DATE AS observation_date,
+ CASE WHEN CDM.residencies.entry_date::TIMESTAMP IS NULL THEN '9999-12-31 00:00:00'
+ ELSE CDM.residencies.entry_date::TIMESTAMP
+END AS observation_datetime,
+ 45905771 AS observation_type_concept_id,
+ NULL AS value_as_number,
+ NULL AS value_as_string,
+ CASE WHEN CDM.residencies.entry_type = 'Baseline' THEN 8568
+	WHEN CDM.residencies.entry_type = 'Birth' THEN 4216316
+	WHEN CDM.residencies.entry_type = 'in-migration' THEN 45878942
+ELSE 0
+END AS value_as_concept_id,
+ CASE WHEN CDM.residencies.entry_type = 'in-migraration' THEN 44804024
+ ELSE NULL
+END AS qualifier_concept_id,
+ 4299438 AS unit_concept_id,
+ NULL AS provider_id,
+ NULL AS visit_occurrence_id, -- Link it as foreign key to visit_occurence_id form the visit_occurence OMOP table
+ NULL AS visit_detail_id,
+CDM.residencies.entry_type AS observation_source_value,
+ 0 AS observation_source_concept_id,
+ 'Individual' AS unit_source_value,
+ NULL AS qualifier_source_value,
+ NULL AS observation_event_id,
+ 0 AS obs_event_field_concept_id,
+ NULL AS value_as_datetime
+FROM CDM.residencies
+INNER JOIN cdm.person
+ON CAST(cdm.person.person_source_value AS BIGINT) = CAST(CDM.residencies.idno AS BIGINT);
+
+--ii)	Insert episode end/exit to convert to long format.
+INSERT INTO cdm.observation
+(
+ observation_id,
+ person_id,
+ observation_concept_id,
+ observation_date,
+ observation_datetime,
+ observation_type_concept_id,
+ value_as_number,
+ value_as_string,
+ value_as_concept_id,
+ qualifier_concept_id,
+ unit_concept_id,
+ provider_id,
+ visit_occurrence_id,
+ visit_detail_id,
+ observation_source_value,
+ observation_source_concept_id,
+ unit_source_value,
+ qualifier_source_value,
+ observation_event_id,
+ obs_event_field_concept_id,
+ value_as_datetime
+)
+SELECT
+ NEXTVAL('cdm.observation_id_seq') AS observation_id,
+ cdm.person.person_id AS person_id,
+4295659 AS observation_concept_id,
+ residencies.exit_date::DATE AS observation_date,
+ CASE WHEN CDM.residencies.exit_date::DATE IS NULL THEN '9999-12-31 00:00:00'
+ ELSE CDM.residencies.exit_date::DATE
+END AS observation_datetime,
+ 45905771 AS observation_type_concept_id,
+ NULL AS value_as_number,
+ NULL AS value_as_string,
+ CASE WHEN CDM.residencies.exit_type = 'Present in study' THEN  4181412
+ 	WHEN CDM.residencies.exit_type = 'Death' THEN 4306655
+	WHEN CDM.residencies.exit_type = 'out-migration' THEN 40377961
+	WHEN CDM.residencies.exit_type = 'Lost to follow up' THEN 45618458
+ELSE 0
+END AS value_as_concept_id,
+CASE WHEN CDM.residencies.exit_type = 'out-migration' THEN 44804024
+ ELSE NULL
+END AS qualifier_concept_id,
+ 4299438 AS unit_concept_id,
+ NULL AS provider_id,
+ NULL AS visit_occurrence_id, -- Link it as foreign key to visit_occurence_id form the visit_occurence OMOP table
+ NULL AS visit_detail_id,
+ CDM.residencies.exit_type AS observation_source_value,
+ 0 AS observation_source_concept_id,
+ 'Individual' AS unit_source_value,
+ NULL AS qualifier_source_value,
+ NULL AS observation_event_id,
+ 0 AS obs_event_field_concept_id,
+ NULL AS value_as_datetime
+FROM CDM.residencies
+INNER JOIN cdm.person
+ON CAST(cdm.person.person_source_value AS BIGINT) = CAST(CDM.residencies.idno AS BIGINT);
+
+--LOCATION HISTORY
+--CREATE TABLE 
+CREATE SEQUENCE cdm.location_id_seq;
+CREATE TABLE IF NOT EXISTS cdm.location_history
+(
+location_id bigint NOT NULL,
+relationship_type_concept_id bigint NOT NULL,
+domain_id character varying(50),
+entity_id bigint NOT NULL,
+start_date date NOT NULL,
+end_date date,
+CONSTRAINT xpk_location_history PRIMARY KEY (location_id)
+);
+		
+INSERT INTO cdm.location_history
+(
+ location_id,
+ relationship_type_concept_id,
+ domain_id,
+ entity_id,
+ start_date,
+ end_date
+)
+SELECT
+ NEXTVAL('cdm.location_id_seq') AS location_id,
+ 4049366 AS relationship_type_concept_id,
+ 4129409 AS domain_id,
+ cdm.person.person_id AS entity_id,
+ CASE WHEN cdm.residencies.entry_date::DATE IS NULL THEN '9999-12-31'
+ ELSE cdm.residencies.entry_date::DATE
+ END AS start_date,
+ cdm.residencies.exit_date::DATE AS end_date
+FROM cdm.residencies
+INNER JOIN cdm.person
+ON CAST(cdm.person.person_source_value AS BIGINT) = CAST(cdm.residencies.idno AS BIGINT);
+
+--MAPPING HIV
+--CREATE HIV TEST TABLE 
+DROP TABLE CDM.HIV_TEST
+CREATE TABLE CDM.HIV_TEST(
+	id_no BIGINT, 
+	hiv_test_date VARCHAR,
+	hiv_test_result VARCHAR,
+	informed_of_result INT,
+	source_of_test_information INT,
+	test_report_date VARCHAR,
+	test_assumption INT,
+	survey_round_name VARCHAR,
+	study_name VARCHAR);
+	
+--INSERT DATA FROM CSV FILE 
+COPY CDM.HIV_TEST
+FROM 'D:\APHRC\LHS\OMOP ETL\KISESA DATASETS-20230324T073138Z-001\KISESA DATASETS\HIV_test_csv.csv'
+DELIMITER ','
+CSV HEADER
+NULL 'NA';
+
+--VISIT OCCURRENCE
+--CREATE VISIT OCC TABLE
+CREATE SEQUENCE cdm.visit_occurrence_id_seq;
+CREATE TABLE IF NOT EXISTS cdm.visit_occurrence ( 
+	visit_occurrence_id bigint NOT NULL, 
+	person_id bigint NOT NULL, 
+	visit_concept_id integer NOT NULL, 
+	visit_start_date date, 
+	visit_start_datetime timestamp without time zone NOT NULL, 
+	visit_end_date date, 
+	visit_end_datetime timestamp without time zone NOT NULL, 
+	visit_type_concept_id integer NOT NULL, 
+	provider_id bigint, 
+	care_site_id bigint, 
+	visit_source_value character varying(50), 
+	visit_source_concept_id integer NOT NULL, 
+	admitting_source_concept_id integer NOT NULL, 
+	admitting_source_value character varying(50), 
+	discharge_to_source_value character varying(50), 
+	discharge_to_concept_id integer NOT NULL, 
+	preceding_visit_occurrence_id bigint, 
+	CONSTRAINT xpk_visit_occurrence PRIMARY KEY (visit_occurrence_id) );
+
+INSERT INTO cdm.visit_occurrence
+(
+ visit_occurrence_id,
+ person_id,
+ visit_concept_id,
+ visit_start_date,
+ visit_start_datetime,
+ visit_end_date,
+ visit_end_datetime,
+ visit_type_concept_id,
+ provider_id,
+ care_site_id,
+ visit_source_value,
+ visit_source_concept_id,
+ admitting_source_concept_id,
+ admitting_source_value,
+ discharge_to_concept_id,
+ discharge_to_source_value,
+ preceding_visit_occurrence_id)
+SELECT
+NEXTVAL('cdm.visit_occurrence_id_seq') AS visit_occurrence_id,
+ cdm.person.person_id AS person_id,
+ 4119839 AS visit_concept_id,
+ cdm.hiv_test.hiv_test_date::DATE AS visit_start_date,
+CASE WHEN cdm.hiv_test.hiv_test_date::DATE IS NULL THEN '9999-12-31'
+ELSE cdm.hiv_test.hiv_test_date::DATE
+END AS visit_start_datetime,
+ cdm.hiv_test.hiv_test_date::DATE AS visit_end_date,
+CASE WHEN cdm.hiv_test.hiv_test_date::DATE IS NULL THEN '9999-12-31'
+ELSE cdm.hiv_test.hiv_test_date::DATE
+END AS visit_end_datetime,
+ 44818519 AS visit_type_concept_id,
+ NULL AS provider_id,
+ NULL AS care_site_id,
+ NULL AS visit_source_value,
+ 0 AS visit_source_concept_id,
+ 0 AS admitting_source_concept_id,
+ NULL AS admitting_source_value,
+ 0 AS discharge_to_concept_id,
+ NULL AS discharge_to_source_value,
+ NULL AS preceding_visit_occurrence_id
+FROM cdm.HIV_TEST
+INNER JOIN cdm.person
+ON CAST(cdm.person.person_source_value AS BIGINT) = CAST(cdm.hiv_test.id_no AS BIGINT)
+
+--CONDITION OCC
+--CREATE CONDITION OCC TABLE 
+CREATE SEQUENCE cdm.condition_occurrence_id_seq;
+CREATE TABLE IF NOT EXISTS cdm.condition_occurrence
+(
+ condition_occurrence_id bigint NOT NULL,
+ person_id bigint NOT NULL,
+ condition_concept_id integer NOT NULL,
+ condition_start_date date,
+ condition_start_datetime timestamp without time zone NOT NULL,
+ condition_end_date date,
+ condition_end_datetime timestamp without time zone,
+ condition_type_concept_id integer NOT NULL,
+ condition_status_concept_id integer NOT NULL,
+ stop_reason character varying(20),
+ provider_id bigint,
+ visit_occurrence_id bigint,
+ visit_detail_id bigint,
+ condition_source_value character varying(50),
+ condition_source_concept_id integer NOT NULL,
+ condition_status_source_value character varying(50),
+ CONSTRAINT xpk_condition_occurrence PRIMARY KEY (condition_occurrence_id)
+);
+
+INSERT INTO cdm.condition_occurrence
+(
+ condition_occurrence_id,
+ person_id,
+ condition_concept_id,
+ condition_start_date,
+ condition_start_datetime,
+ condition_end_date,
+ condition_end_datetime,
+ condition_type_concept_id,
+ condition_status_concept_id,
+ stop_reason,
+ provider_id,
+ visit_occurrence_id,
+ visit_detail_id,
+ condition_source_value,
+ condition_source_concept_id,
+ condition_status_source_value
+)
+SELECT
+NEXTVAL('cdm.condition_occurrence_id_seq') AS condition_occurrence_id,
+ cdm.person.person_id AS person_id,
+ CASE WHEN cdm.hiv_test.hiv_test_result = 'Negative' THEN 4013105
+ WHEN cdm.hiv_test.hiv_test_result = 'Positive' THEN 4013106
+ WHEN cdm.hiv_test.hiv_test_result::INT = 9 THEN 4088484
+ ELSE 0
+ END AS condition_concept_id,
+ cdm.hiv_test.hiv_test_date::DATE AS condition_start_date,
+ CASE WHEN cdm.hiv_test.hiv_test_date::DATE IS NULL THEN '9999-12-31'
+ ELSE cdm.hiv_test.hiv_test_date::DATE
+ END AS condition_start_datetime,
+ NULL AS condition_end_date,
+ NULL AS condition_end_datetime,
+ 32809 AS condition_type_concept_id,
+ 0 AS condition_status_concept_id,
+ NULL AS stop_reason,
+ NULL AS provider_id,
+ NULL AS visit_occurrence_id,
+ NULL AS visit_detail_id,
+ cdm.hiv_test.hiv_test_result AS condition_source_value,
+ 0 AS condition_source_concept_id,
+ NULL AS condition_status_source_value
+FROM cdm.hiv_test
+INNER JOIN cdm.person
+ON CAST(cdm.person.person_source_value AS BIGINT) = CAST(cdm.hiv_test.id_no AS BIGINT);
+
+
+--UPDATE VISIT OCC
+UPDATE cdm.condition_occurrence
+SET visit_occurrence_id = cdm.visit_occurrence.visit_occurrence_id
+FROM cdm.visit_occurrence
+WHERE cdm.condition_occurrence.person_id = cdm.visit_occurrence.person_id
+AND cdm.condition_occurrence.condition_start_datetime = cdm.visit_occurrence.visit_start_datetime
+AND cdm.visit_occurrence.visit_type_concept_id = 44818519;
+
+
+

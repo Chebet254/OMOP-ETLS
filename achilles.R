@@ -1,4 +1,4 @@
-install.packages("remotes")
+#install.packages("remotes")
 if(!require(DatabaseConnector)){
   install.packages("DatabaseConnector")
   library(DatabaseConnector)
@@ -9,10 +9,11 @@ library(remotes)
 #set JDBC drivers
 Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = "c:/temp/jdbcDrivers")
 downloadJdbcDrivers("postgresql")
+
 #create connection
 connectiondetails <- DatabaseConnector::createConnectionDetails(
   dbms = "postgresql",
-  server = "localhost/POSTGRESQL 14",
+  server = "localhost/postgres",
   user = "postgres",
   password = "",
   port = 5432
@@ -29,8 +30,8 @@ Achilles::validateSchema(connectionDetails = connectiondetails,
                          sqlOnly = FALSE)
 
 Achilles::achilles(connectionDetails = connectiondetails,
-                   cdmDatabaseSchema = "cdm",
-                   resultsDatabaseSchema = "achilles_results",
+                   cdmDatabaseSchema = "public",
+                   resultsDatabaseSchema = "achillesresults",  #no capital letters- brings issues with postgres
                    sourceName = "cdm",
                    createTable = TRUE,
                    smallCellCount = 5,
@@ -41,9 +42,9 @@ Achilles::achilles(connectionDetails = connectiondetails,
 
 
 Achilles::exportToJson(connectionDetails = connectiondetails,
-                       cdmDatabaseSchema = "cdm",
-                       resultsDatabaseSchema = "achilles_results",
-                       outputPath = "D:/APHRC/LHS project/OMOP ETL/output/cdm",
+                       cdmDatabaseSchema = "public",
+                       resultsDatabaseSchema = "achillesresults",
+                       outputPath = outputFolder,
                        vocabDatabaseSchema = "cdm",
                        compressIntoOneFile = FALSE)
 

@@ -37,8 +37,7 @@ Achilles::achilles(connectionDetails = connectiondetails,
                    smallCellCount = 5,
                    cdmVersion = 5.4,
                    numThreads = 1,
-                   outputFolder = outputFolder
-)
+                   outputFolder = outputFolder)
 
 
 Achilles::exportToJson(connectionDetails = connectiondetails,

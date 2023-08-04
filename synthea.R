@@ -15,7 +15,7 @@ cdmVersion     <- "5.4"
 syntheaVersion <- "2.7.0"
 syntheaSchema  <- "native"
 syntheaFileLoc <- "D:/APHRC/LHS/OMOP ETL/KISESA DATASETS-20230324T073138Z-001/KISESA DATASETS/Residency.csv"
-vocabFileLoc   <- "/tmp/Vocabulary_20181119"
+vocabFileLoc   <- "/Vocabulary_download_v5"
 
 ETLSyntheaBuilder::CreateCDMTables(connectionDetails = cd, cdmSchema = cdmSchema, cdmVersion = cdmVersion)
 

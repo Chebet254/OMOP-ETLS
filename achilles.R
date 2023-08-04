@@ -16,18 +16,12 @@ connectiondetails <- DatabaseConnector::createConnectionDetails(
   server = "localhost/postgres",
   user = "postgres",
   password = "",
-  port = 5432
+  port = 5432,
+  pathToDriver = "c:/temp/jdbcDrivers"
 )
 
 outputFolder <- "D:/APHRC/LHS project/OMOP ETL/output"
 
-Achilles::validateSchema(connectionDetails = connectiondetails,
-                         cdmDatabaseSchema = "cdm",
-                         resultsDatabaseSchema = "cdm",
-                         cdmVersion = 5.4,
-                         runCostAnalysis = FALSE,
-                         outputFolder = outputFolder,
-                         sqlOnly = FALSE)
 
 Achilles::achilles(connectionDetails = connectiondetails,
                    cdmDatabaseSchema = "public",
@@ -47,3 +41,11 @@ Achilles::exportToJson(connectionDetails = connectiondetails,
                        vocabDatabaseSchema = "cdm",
                        compressIntoOneFile = FALSE)
 
+
+
+cdmSchema      <- "public"
+cdmVersion     <- "5.4"
+vocabFileLoc   <- "/Vocabulary_download_v5"
+
+CreateCDMTables(connectionDetails = connectiondetails, cdmSchema = cdmSchema, cdmVersion = cdmVersion)
+LoadVocabFromCsv(connectionDetails = connectiondetails, cdmSchema = cdmSchema, vocabFileLoc = vocabFileLoc)

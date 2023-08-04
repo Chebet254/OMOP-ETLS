@@ -47,6 +47,14 @@ residencies <- dbGetQuery(con2, "SELECT * from residencies")
 # write.csv(visit_occurrence, "D:/APHRC/LHS project/Kisesa datasets/visit_occurrence.csv")
 #write.csv(observation_period, "D:/APHRC/LHS project/Kisesa datasets/observation_period.csv")
 
+n <- unique(residencies$idno)
+un <- residencies %>% distinct(idno, sex)
+males <- un %>% filter(sex == 1)
+females <- un %>% filter(sex == 2)
+
+
+
+
 
 #CREATING MORTALITY SPEC FROM CONDITION OCCURRENCE AND PERSON TABLE
 #calculate ages

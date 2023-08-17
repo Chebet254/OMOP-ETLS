@@ -394,7 +394,7 @@ INNER JOIN public.PERSON
 ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --OTHER HEART DISEASE
-INSERT INTO public.CONDITION_OCCURENCE
+INSERT INTO public.condition_occurrence
 (
  condition_occurrence_id,
  person_id,
@@ -416,11 +416,11 @@ INSERT INTO public.CONDITION_OCCURENCE
 SELECT
 NEXTVAL('public.CONDITION_OCCURENCE_id_seq') AS condition_occurrence_id,
  public.PERSON.person_id AS person_id,
- CASE WHEN public.other_heart_disease::INT  = 1 THEN 45879053
- --ELSE 0
+ CASE WHEN public.Diabetes.other_heart_disease  = 'Yes' THEN 45879053
+ ELSE 0
  END AS condition_concept_id,
- year_other_heart_disease::DATE AS condition_start_date,
- year_other_heart_disease::DATE AS condition_start_datetime,
+ to_date(year_other_heart_disease::varchar, 'YYYY') AS condition_start_date,
+ to_date(year_other_heart_disease::varchar, 'YYYY') AS condition_start_datetime,
  NULL AS condition_end_date,
  NULL AS condition_end_datetime,
  44804112 AS condition_type_concept_id,
@@ -429,17 +429,17 @@ NEXTVAL('public.CONDITION_OCCURENCE_id_seq') AS condition_occurrence_id,
  NULL AS provider_id,
  NULL AS visit_occurrence_id,
  NULL AS visit_detail_id,
- CASE WHEN public.other_heart_disease::INT = 1 THEN 'Other heart disease' 
+ CASE WHEN public.Diabetes.other_heart_disease = 'Yes' THEN 'Other heart disease' 
  --ELSE 'NO'
  END AS condition_source_value,
  0 AS condition_source_concept_id,
  NULL AS condition_status_source_value
-FROM public
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --KIDNEY DISEASE
-INSERT INTO public.CONDITION_OCCURENCE
+INSERT INTO public.condition_occurrence
 (
  condition_occurrence_id,
  person_id,
@@ -461,11 +461,11 @@ INSERT INTO public.CONDITION_OCCURENCE
 SELECT
 NEXTVAL('public.CONDITION_OCCURENCE_id_seq') AS condition_occurrence_id,
  public.PERSON.person_id AS person_id,
- CASE WHEN public.kidney_disease::INT  = 1 THEN 198124
- --ELSE 0
+ CASE WHEN public.Diabetes.kidney_disease = 'Yes' THEN 198124
+ ELSE 0
  END AS condition_concept_id,
- year_kidney_disease::DATE AS condition_start_date,
- year_kidney_disease::DATE AS condition_start_datetime,
+ to_date(year_kidney_disease::varchar, 'YYYY') AS condition_start_date,
+ to_date(year_kidney_disease::varchar, 'YYYY') AS condition_start_datetime,
  NULL AS condition_end_date,
  NULL AS condition_end_datetime,
  44804112 AS condition_type_concept_id,
@@ -474,19 +474,17 @@ NEXTVAL('public.CONDITION_OCCURENCE_id_seq') AS condition_occurrence_id,
  NULL AS provider_id,
  NULL AS visit_occurrence_id,
  NULL AS visit_detail_id,
- CASE WHEN public.kidney_disease::INT = 1 THEN 'Kidney disease' 
+ CASE WHEN public.Diabetes.kidney_disease = 'Yes' THEN 'Kidney disease' 
  --ELSE 'NO'
  END AS condition_source_value,
  0 AS condition_source_concept_id,
  NULL AS condition_status_source_value
-FROM public
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
-
-select * from public.condition_occurence
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 -- STROKE
-INSERT INTO public.CONDITION_OCCURENCE
+INSERT INTO public.condition_occurrence
 (
  condition_occurrence_id,
  person_id,
@@ -508,11 +506,11 @@ INSERT INTO public.CONDITION_OCCURENCE
 SELECT
 NEXTVAL('public.CONDITION_OCCURENCE_id_seq') AS condition_occurrence_id,
  public.PERSON.person_id AS person_id,
- CASE WHEN public.stroke::INT  = 1 THEN 36210384
- --ELSE 0
+ CASE WHEN public.Diabetes.stroke = 'Yes' THEN 36210384
+ ELSE 0
  END AS condition_concept_id,
- year_stroke::DATE AS condition_start_date,
- year_stroke::DATE AS condition_start_datetime,
+ to_date(year_stroke::varchar, 'YYYY') AS condition_start_date,
+ to_date(year_stroke::varchar, 'YYYY') AS condition_start_datetime,
  NULL AS condition_end_date,
  NULL AS condition_end_datetime,
  44804112 AS condition_type_concept_id,
@@ -521,17 +519,17 @@ NEXTVAL('public.CONDITION_OCCURENCE_id_seq') AS condition_occurrence_id,
  NULL AS provider_id,
  NULL AS visit_occurrence_id,
  NULL AS visit_detail_id,
- CASE WHEN public.stroke::INT = 1 THEN 'STROKE' 
+ CASE WHEN public.Diabetes.stroke = 'Yes' THEN 'STROKE' 
  --ELSE 'NO'
  END AS condition_source_value,
  0 AS condition_source_concept_id,
  NULL AS condition_status_source_value
-FROM public
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --LIVER DISEASE
-INSERT INTO public.CONDITION_OCCURENCE
+INSERT INTO public.condition_occurrence
 (
  condition_occurrence_id,
  person_id,
@@ -553,11 +551,11 @@ INSERT INTO public.CONDITION_OCCURENCE
 SELECT
 NEXTVAL('public.CONDITION_OCCURENCE_id_seq') AS condition_occurrence_id,
  public.PERSON.person_id AS person_id,
- CASE WHEN public.liver_disease::INT  = 1 THEN 21499348
--- ELSE 0
+ CASE WHEN public.Diabetes.liver_disease = 'Yes' THEN 21499348
+	ELSE 0
  END AS condition_concept_id,
- year_liver_disease::DATE AS condition_start_date,
- year_liver_disease::DATE AS condition_start_datetime,
+ to_date(year_liver_disease::varchar, 'YYYY') AS condition_start_date,
+ to_date(year_liver_disease::varchar, 'YYYY') AS condition_start_datetime,
  NULL AS condition_end_date,
  NULL AS condition_end_datetime,
  44804112 AS condition_type_concept_id,
@@ -566,17 +564,17 @@ NEXTVAL('public.CONDITION_OCCURENCE_id_seq') AS condition_occurrence_id,
  NULL AS provider_id,
  NULL AS visit_occurrence_id,
  NULL AS visit_detail_id,
- CASE WHEN public.liver_disease::INT = 1 THEN 'LIVER DISEASE' 
+ CASE WHEN public.Diabetes.liver_disease = 'Yes' THEN 'LIVER DISEASE' 
  --ELSE 'NO'
  END AS condition_source_value,
  0 AS condition_source_concept_id,
  NULL AS condition_status_source_value
-FROM public
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --CANCER
-INSERT INTO public.CONDITION_OCCURENCE
+INSERT INTO public.condition_occurrence
 (
  condition_occurrence_id,
  person_id,
@@ -598,11 +596,11 @@ INSERT INTO public.CONDITION_OCCURENCE
 SELECT
 NEXTVAL('public.CONDITION_OCCURENCE_id_seq') AS condition_occurrence_id,
  public.PERSON.person_id AS person_id,
- CASE WHEN public.any_cancer::INT  = 1 THEN 45877275
- --ELSE 0
+ CASE WHEN public.Diabetes.any_cancer  = 'Yes' THEN 45877275
+ ELSE 0
  END AS condition_concept_id,
- year_any_cancer::DATE AS condition_start_date,
- year_any_cancer::DATE AS condition_start_datetime,
+ to_date(year_any_cancer::varchar, 'YYYY') AS condition_start_date,
+ to_date(year_any_cancer::varchar, 'YYYY') AS condition_start_datetime,
  NULL AS condition_end_date,
  NULL AS condition_end_datetime,
  44804112 AS condition_type_concept_id,
@@ -611,17 +609,17 @@ NEXTVAL('public.CONDITION_OCCURENCE_id_seq') AS condition_occurrence_id,
  NULL AS provider_id,
  NULL AS visit_occurrence_id,
  NULL AS visit_detail_id,
- CASE WHEN public.any_cancer::INT = 1 THEN 'ANY CANCER' 
+ CASE WHEN public.Diabetes.any_cancer = 'Yes' THEN 'ANY CANCER' 
  --ELSE 'NO'
  END AS condition_source_value,
  0 AS condition_source_concept_id,
  NULL AS condition_status_source_value
-FROM public
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --TB
-INSERT INTO public.CONDITION_OCCURENCE
+INSERT INTO public.condition_occurrence
 (
  condition_occurrence_id,
  person_id,
@@ -643,11 +641,11 @@ INSERT INTO public.CONDITION_OCCURENCE
 SELECT
 NEXTVAL ('public.CONDITION_OCCURENCE_id_seq') AS condition_occurrence_id,
  public.PERSON.person_id AS person_id,
- CASE WHEN public.TB::INT  = 1 THEN 434557
- --ELSE 0
+ CASE WHEN public.Diabetes.TB  = 'Yes' THEN 434557
+ ELSE 0
  END AS condition_concept_id,
- year_TB::DATE AS condition_start_date,
- year_TB::DATE AS condition_start_datetime,
+ to_date(year_TB::varchar, 'YYYY') AS condition_start_date,
+ to_date(year_TB::varchar, 'YYYY') AS condition_start_datetime,
  NULL AS condition_end_date,
  NULL AS condition_end_datetime,
  44804112 AS condition_type_concept_id,
@@ -656,46 +654,25 @@ NEXTVAL ('public.CONDITION_OCCURENCE_id_seq') AS condition_occurrence_id,
  NULL AS provider_id,
  NULL AS visit_occurrence_id,
  NULL AS visit_detail_id,
- CASE WHEN public.TB::INT = 1 THEN 'TB' 
+ CASE WHEN public.Diabetes.TB = 'Yes' THEN 'TB' 
  --ELSE 'NO'
  END AS condition_source_value,
  0 AS condition_source_concept_id,
  NULL AS condition_status_source_value
-FROM public
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
-
-SELECT * FROM public.CONDITION_OCCURENCE
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --MEASUREMENT TABLE 
-CREATE TABLE IF NOT EXISTS public.MEASUREMENT (
-	measurement_id INT not null,
-	person_id INT NOT NULL,
-	measurement_concept_id INT NOT NULL,
-	measurement_date DATE NOT NULL,
-	measurement_datetime timestamp without time zone,
-	measurement_time VARCHAR,
-	measurement_type_concept_id INT NOT NULL,
-	operator_concept_id INT,
-	value_as_number FLOAT, 
-	value_as_concept_id INT,
-	unit_concept_id INT,
-	range_low FLOAT,
-	range_high FLOAT,
-	provider_id INT,
-	visit_occurrence_id INT,
-	visit_detail_id INT,
-	measurement_source_value VARCHAR(50),
-	measurement_source_concept_id INT,
-	unit_source_value VARCHAR(50),
-	value_source_value VARCHAR(50),
-	CONSTRAINT xpk_measurement PRIMARY KEY (measurement_id)
-)
 --create sequence 
-CREATE SEQUENCE public.MEASUREMENT_id_seq;
+CREATE SEQUENCE public.measurement_id_seq;
+ALTER TABLE public.measurement DROP CONSTRAINT fpk_measurement_measurement_concept_id;
+ALTER TABLE public.measurement DROP CONSTRAINT fpk_measurement_measurement_type_concept_id;
+ALTER TABLE public.measurement DROP CONSTRAINT fpk_measurement_operator_concept_id;
+ALTER TABLE public.measurement DROP CONSTRAINT fpk_measurement_value_as_concept_id;
 
 --level of oedema
-INSERT INTO public.MEASUREMENT (
+INSERT INTO public.measurement (
 	measurement_id,
 	person_id,
 	measurement_concept_id,
@@ -718,19 +695,19 @@ INSERT INTO public.MEASUREMENT (
 	value_source_value
 )
 SELECT 
-NEXTVAL ('public.MEASUREMENT_id_seq') as measurement_id,
+NEXTVAL ('public.measurement_id_seq') as measurement_id,
 public.PERSON.person_id AS person_id,
-CASE WHEN public.pedal_oedema::INT = 2 THEN 4010362
+CASE WHEN public.Diabetes.pedal_oedema = 'Yes' THEN 4010362
 	ELSE 0
 END AS measurement_concept_id,
-public.interview_date AS measurement_date,
+public.Diabetes.interview_date AS measurement_date,
 NULL as measurement_datetime,
 NULL AS measurement_time, 
 32809 AS measurement_type_concept_id,
 4172703 AS operator_concept_id, 
 NULL AS value_as_number,
-CASE WHEN public.level_of_oedema::INT = 2 THEN 45877983
-	WHEN public.level_of_oedema::INT = 1 THEN 45883535
+CASE WHEN public.Diabetes.level_of_oedema = 'Moderate' THEN 45877983
+	WHEN public.Diabetes.level_of_oedema = 'Mild' THEN 45883535
 	ELSE 0
 	END AS value_as_concept_id,
 NULL AS unit_concept_id,
@@ -740,15 +717,15 @@ NULL AS provider_id,
 NULL AS visit_occurrence_id,
 NULL AS visit_detail_id, 
 NULL AS measurement_source_value,
-public.pedal_oedema::INT AS measurement_source_concept_id,
+NULL AS measurement_source_concept_id,
 NULL AS unit_source_value,
-public.level_of_oedema AS value_source_value
-FROM public
+public.Diabetes.level_of_oedema AS value_source_value
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --Blodd pressure sys 
-INSERT INTO public.MEASUREMENT (
+INSERT INTO public.measurement (
 	measurement_id,
 	person_id,
 	measurement_concept_id,
@@ -771,15 +748,15 @@ INSERT INTO public.MEASUREMENT (
 	value_source_value
 )
 SELECT 
-NEXTVAL ('public.MEASUREMENT_id_seq') as measurement_id,
+NEXTVAL ('public.measurement_id_seq') as measurement_id,
 public.PERSON.person_id AS person_id,
 4152194 AS measurement_concept_id,
-public.interview_date AS measurement_date,
+public.Diabetes.interview_date AS measurement_date,
 NULL as measurement_datetime,
 NULL AS measurement_time, 
 32809 AS measurement_type_concept_id,
 4172703 AS operator_concept_id, 
-public.blood_pressure_systolic::INT AS value_as_number,
+public.Diabetes.blood_pressure_systolic::INT AS value_as_number,
 NULL AS value_as_concept_id,
 NULL AS unit_concept_id,
 NULL AS range_low,
@@ -790,13 +767,13 @@ NULL AS visit_detail_id,
 NULL AS measurement_source_value,
 NULL AS measurement_source_concept_id,
 'Blood Pressure Systolic'  AS unit_source_value,
-public.blood_pressure_systolic AS value_source_value
-FROM public
+public.Diabetes.blood_pressure_systolic AS value_source_value
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --BLOOD PRESSURE DIAS
-INSERT INTO public.MEASUREMENT (
+INSERT INTO public.measurement (
 	measurement_id,
 	person_id,
 	measurement_concept_id,
@@ -819,15 +796,15 @@ INSERT INTO public.MEASUREMENT (
 	value_source_value
 )
 SELECT 
-NEXTVAL ('public.MEASUREMENT_id_seq') as measurement_id,
+NEXTVAL ('public.measurement_id_seq') as measurement_id,
 public.PERSON.person_id AS person_id,
 4154790 AS measurement_concept_id,
-public.interview_date AS measurement_date,
+public.Diabetes.interview_date AS measurement_date,
 NULL as measurement_datetime,
 NULL AS measurement_time, 
 32809 AS measurement_type_concept_id,
 4172703 AS operator_concept_id, 
-public.blood_pressure_diastolic::INT AS value_as_number,
+public.Diabetes.blood_pressure_diastolic::INT AS value_as_number,
 NULL AS value_as_concept_id,
 NULL AS unit_concept_id,
 NULL AS range_low,
@@ -838,13 +815,13 @@ NULL AS visit_detail_id,
 NULL AS measurement_source_value,
 NULL AS measurement_source_concept_id,
 'Blood Pressure Diastolic'  AS unit_source_value,
-public.blood_pressure_diastolic AS value_source_value
-FROM public
+public.Diabetes.blood_pressure_diastolic AS value_source_value
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --height 
-INSERT INTO public.MEASUREMENT (
+INSERT INTO public.measurement (
 	measurement_id,
 	person_id,
 	measurement_concept_id,
@@ -867,15 +844,15 @@ INSERT INTO public.MEASUREMENT (
 	value_source_value
 )
 SELECT 
-NEXTVAL ('public.MEASUREMENT_id_seq') as measurement_id,
+NEXTVAL ('public.measurement_id_seq') as measurement_id,
 public.PERSON.person_id AS person_id,
 607590 AS measurement_concept_id,
-public.interview_date AS measurement_date,
+public.Diabetes.interview_date AS measurement_date,
 NULL as measurement_datetime,
 NULL AS measurement_time, 
 32809 AS measurement_type_concept_id,
 4172703 AS operator_concept_id, 
-public.average_height::INT AS value_as_number,
+public.Diabetes.height_reading1::float AS value_as_number,
 NULL AS value_as_concept_id,
 NULL AS unit_concept_id,
 NULL AS range_low,
@@ -885,14 +862,14 @@ NULL AS visit_occurrence_id,
 NULL AS visit_detail_id, 
 NULL AS measurement_source_value,
 NULL AS measurement_source_concept_id,
-'Average Height'  AS unit_source_value,
-public.average_height AS value_source_value
-FROM public
+'Height'  AS unit_source_value,
+public.Diabetes.height_reading1::float AS value_source_value
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --weight
-INSERT INTO public.MEASUREMENT (
+INSERT INTO public.measurement (
 	measurement_id,
 	person_id,
 	measurement_concept_id,
@@ -915,15 +892,15 @@ INSERT INTO public.MEASUREMENT (
 	value_source_value
 )
 SELECT 
-NEXTVAL ('public.MEASUREMENT_id_seq') as measurement_id,
+NEXTVAL ('public.measurement_id_seq') as measurement_id,
 public.PERSON.person_id AS person_id,
 4099154 AS measurement_concept_id,
-public.interview_date AS measurement_date,
+public.Diabetes.interview_date AS measurement_date,
 NULL as measurement_datetime,
 NULL AS measurement_time, 
 32809 AS measurement_type_concept_id,
 4172703 AS operator_concept_id, 
-public.weight_kg::float AS value_as_number,
+public.Diabetes.weight_kg::float AS value_as_number,
 NULL AS value_as_concept_id,
 NULL AS unit_concept_id,
 NULL AS range_low,
@@ -934,13 +911,13 @@ NULL AS visit_detail_id,
 NULL AS measurement_source_value,
 NULL AS measurement_source_concept_id,
 'Weight kg'  AS unit_source_value,
-public.weight_kg AS value_source_value
-FROM public
+public.Diabetes.weight_kg AS value_source_value
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --waist circumference
-INSERT INTO public.MEASUREMENT (
+INSERT INTO public.measurement (
 	measurement_id,
 	person_id,
 	measurement_concept_id,
@@ -963,15 +940,15 @@ INSERT INTO public.MEASUREMENT (
 	value_source_value
 )
 SELECT 
-NEXTVAL ('public.MEASUREMENT_id_seq') as measurement_id,
+NEXTVAL ('public.measurement_id_seq') as measurement_id,
 public.PERSON.person_id AS person_id,
 4172830 AS measurement_concept_id,
-public.interview_date AS measurement_date,
+public.Diabetes.interview_date AS measurement_date,
 NULL as measurement_datetime,
 NULL AS measurement_time, 
 32809 AS measurement_type_concept_id,
 4172703 AS operator_concept_id, 
-public.waist_circumference::float AS value_as_number,
+public.Diabetes.waist_circumference::float AS value_as_number,
 NULL AS value_as_concept_id,
 NULL AS unit_concept_id,
 NULL AS range_low,
@@ -982,14 +959,14 @@ NULL AS visit_detail_id,
 NULL AS measurement_source_value,
 NULL AS measurement_source_concept_id,
 'Waist circumference'  AS unit_source_value,
-public.waist_circumference AS value_source_value
-FROM public
+public.Diabetes.waist_circumference AS value_source_value
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 
 --hip circumference 
-INSERT INTO public.MEASUREMENT (
+INSERT INTO public.measurement (
 	measurement_id,
 	person_id,
 	measurement_concept_id,
@@ -1012,15 +989,15 @@ INSERT INTO public.MEASUREMENT (
 	value_source_value
 )
 SELECT 
-NEXTVAL ('public.MEASUREMENT_id_seq') as measurement_id,
+NEXTVAL ('public.measurement_id_seq') as measurement_id,
 public.PERSON.person_id AS person_id,
 4111665 AS measurement_concept_id,
-public.interview_date AS measurement_date,
+public.Diabetes.interview_date AS measurement_date,
 NULL as measurement_datetime,
 NULL AS measurement_time, 
 32809 AS measurement_type_concept_id,
 4172703 AS operator_concept_id, 
-public.hip_circumference::float AS value_as_number,
+public.Diabetes.hip_circumference::float AS value_as_number,
 NULL AS value_as_concept_id,
 NULL AS unit_concept_id,
 NULL AS range_low,
@@ -1031,13 +1008,13 @@ NULL AS visit_detail_id,
 NULL AS measurement_source_value,
 NULL AS measurement_source_concept_id,
 'Hip circumference'  AS unit_source_value,
-public.hip_circumference AS value_source_value
-FROM public
+public.Diabetes.hip_circumference AS value_source_value
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --blood glucose
-INSERT INTO public.MEASUREMENT (
+INSERT INTO public.measurement (
 	measurement_id,
 	person_id,
 	measurement_concept_id,
@@ -1060,15 +1037,15 @@ INSERT INTO public.MEASUREMENT (
 	value_source_value
 )
 SELECT 
-NEXTVAL ('public.MEASUREMENT_id_seq') as measurement_id,
+NEXTVAL ('public.measurement_id_seq') as measurement_id,
 public.PERSON.person_id AS person_id,
 37399654 AS measurement_concept_id,
-public.interview_date AS measurement_date,
+public.Diabetes.interview_date AS measurement_date,
 NULL as measurement_datetime,
 NULL AS measurement_time, 
 32809 AS measurement_type_concept_id,
 4172703 AS operator_concept_id, 
-public.blood_glucose::float AS value_as_number,
+public.Diabetes.blood_glucose::float AS value_as_number,
 NULL AS value_as_concept_id,
 NULL AS unit_concept_id,
 NULL AS range_low,
@@ -1079,13 +1056,13 @@ NULL AS visit_detail_id,
 NULL AS measurement_source_value,
 NULL AS measurement_source_concept_id,
 'Blood Glucose'  AS unit_source_value,
-public.blood_glucose AS value_source_value
-FROM public
+public.Diabetes.blood_glucose AS value_source_value
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 --hba1c measurement
-INSERT INTO public.MEASUREMENT (
+INSERT INTO public.measurement (
 	measurement_id,
 	person_id,
 	measurement_concept_id,
@@ -1108,15 +1085,15 @@ INSERT INTO public.MEASUREMENT (
 	value_source_value
 )
 SELECT 
-NEXTVAL ('public.MEASUREMENT_id_seq') as measurement_id,
+NEXTVAL ('public.measurement_id_seq') as measurement_id,
 public.PERSON.person_id AS person_id,
 4184637 AS measurement_concept_id,
-public.interview_date AS measurement_date,
+public.Diabetes.interview_date AS measurement_date,
 NULL as measurement_datetime,
 NULL AS measurement_time, 
 32809 AS measurement_type_concept_id,
 4172703 AS operator_concept_id, 
-public.hba1c_measurement::float AS value_as_number,
+public.Diabetes.hba1c_measurement::float AS value_as_number,
 NULL AS value_as_concept_id,
 NULL AS unit_concept_id,
 NULL AS range_low,
@@ -1127,45 +1104,24 @@ NULL AS visit_detail_id,
 NULL AS measurement_source_value,
 NULL AS measurement_source_concept_id,
 'Haemoglobin measurement'  AS unit_source_value,
-public.hba1c_measurement AS value_source_value
-FROM public
+public.Diabetes.hba1c_measurement AS value_source_value
+FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
 
---OBSERVATION TABLE 
-CREATE TABLE IF NOT EXISTS public.OBSERVATION
-(
- observation_id bigint NOT NULL,
- person_id bigint NOT NULL,
- observation_concept_id integer NOT NULL,
- observation_date date,
- observation_datetime timestamp without time zone NOT NULL,
- observation_type_concept_id integer NOT NULL,
- value_as_number numeric,
- value_as_string character varying(60),
- value_as_concept_id integer,
- qualifier_concept_id integer,
- unit_concept_id integer,
- provider_id bigint,
- visit_occurrence_id bigint,
- visit_detail_id bigint,
- observation_source_value character varying(50),
- observation_source_concept_id integer NOT NULL,
- unit_source_value character varying(50),
- qualifier_source_value character varying(50),
- observation_event_id bigint,
- obs_event_field_concept_id integer NOT NULL,
- value_as_datetime timestamp without time zone,
- CONSTRAINT xpk_observation PRIMARY KEY (observation_id)
-);
-
+--observation TABLE 
 --CREATE SEQ
-CREATE SEQUENCE public.OBSERVATION_id_seq;
-select * from public limit 5
-DELETE FROM public.OBSERVATION
+CREATE SEQUENCE public.observation_id_seq;
+ALTER TABLE public.observation DROP CONSTRAINT fpk_observation_observation_concept_id;
+ALTER TABLE public.observation DROP CONSTRAINT fpk_observation_observation_type_concept_id;
+ALTER TABLE public.observation DROP CONSTRAINT fpk_observation_value_as_concept_id;
+ALTER TABLE public.observation DROP CONSTRAINT fpk_observation_unit_concept_id;
+ALTER TABLE public.observation DROP CONSTRAINT fpk_observation_observation_source_concept_id;
+ALTER TABLE public.observation DROP CONSTRAINT fpk_observation_obs_event_field_concept_id;
+
 ---INSERT INTO DM OBS
-INSERT INTO public.OBSERVATION
+INSERT INTO public.observation
 (
  observation_id,
  person_id,
@@ -1186,32 +1142,31 @@ INSERT INTO public.OBSERVATION
  unit_source_value,
  qualifier_source_value,
  observation_event_id,
- obs_event_field_concept_id,
- value_as_datetime
+ obs_event_field_concept_id
 )
 SELECT
- NEXTVAL('public.OBSERVATION_id_seq') AS observation_id,
+ NEXTVAL('public.observation_id_seq') AS observation_id,
  public.PERSON.person_id AS person_id,
  4295659 AS observation_concept_id,
- public.interview_date  AS observation_date,
- CASE WHEN public.interview_date is NULL THEN '9999-12-31 00:00:00'
- ELSE public.interview_date 
+ public.Diabetes.interview_date  AS observation_date,
+ CASE WHEN public.Diabetes.interview_date is NULL THEN '9999-12-31 00:00:00'
+ ELSE public.Diabetes.interview_date 
  END AS observation_datetime,
  45905771 AS observation_type_concept_id,
  NULL AS value_as_number,
  NULL AS value_as_string,
- CASE WHEN public.peripheral_neuropathy::INT = 1 THEN 35826737
- 	WHEN public.poor_vision::INT = 1 THEN 45529282
-	WHEN public.amputation::INT = 1 THEN 40768787
-	WHEN public.kidney_complications::INT = 1 THEN 43529062
-	WHEN public.chest_pain::INT = 1 THEN 36310512
-	WHEN public.body_swelling::INT = 1 THEN 905026
-	WHEN public.smoked_tobacco::INT = 1 THEN 42530793
-	WHEN public.smokeless_tobacco::INT = 1 THEN 36308511
-	WHEN public.alcohol::INT = 1 THEN 45883296
-	WHEN public.anaemic::INT = 1 THEN 439777
-	WHEN public.dehydrated::INT = 1 THEN 36308918
-	WHEN public.respondent_stand_up::INT = 1 THEN 4105536
+ CASE WHEN public.Diabetes.peripheral_neuropathy = 'Yes' THEN 35826737
+ 	WHEN public.Diabetes.poor_vision = 'Yes' THEN 45529282
+	WHEN public.Diabetes.amputation = 'Yes' THEN 40768787
+	WHEN public.Diabetes.kidney_complications = 'Yes' THEN 43529062
+	WHEN public.Diabetes.chest_pain = 'Yes' THEN 36310512
+	WHEN public.Diabetes.body_swelling = 'Yes' THEN 905026
+	WHEN public.Diabetes.smoked_tobacco = 'Yes' THEN 42530793
+	WHEN public.Diabetes.smokeless_tobacco = 'Yes' THEN 36308511
+	WHEN public.Diabetes.alcohol = 'Yes' THEN 45883296
+	WHEN public.Diabetes.anaemic = 'Yes' THEN 439777
+	WHEN public.Diabetes.dehydrated = 'Yes' THEN 36308918
+	WHEN public.Diabetes.respondent_stand_up = 'Yes' THEN 4105536
 	ELSE 0
 	END AS value_as_concept_id,
  NULL AS qualifier_concept_id,
@@ -1219,29 +1174,28 @@ SELECT
  NULL AS provider_id,
  NULL AS visit_occurrence_id, 
  NULL AS visit_detail_id,
- CASE WHEN public.peripheral_neuropathy::INT = 1 THEN 'YES'
-   	WHEN public.poor_vision::INT = 1 THEN 'YES'
-	WHEN public.amputation::INT = 1 THEN 'YES'
-	WHEN public.kidney_complications::INT = 1 THEN 'YES'
-	WHEN public.chest_pain::INT = 1 THEN 'YES'
-	WHEN public.body_swelling::INT = 1 THEN 'YES'
-	WHEN public.smoked_tobacco::INT = 1 THEN 'YES'
-	WHEN public.smokeless_tobacco::INT = 1 THEN 'YES'
-	WHEN public.alcohol::INT = 1 THEN 'YES'
-	WHEN public.anaemic::INT = 1 THEN 'YES'
-	WHEN public.dehydrated::INT = 1 THEN 'YES'
-	WHEN public.respondent_stand_up::INT = 1 THEN 'YES'
+ CASE WHEN public.Diabetes.peripheral_neuropathy = 'Yes' THEN 'PERIPHERAL NEUROPATHY'
+   	WHEN public.Diabetes.poor_vision = 'Yes' THEN 'POOR VISION'
+	WHEN public.Diabetes.amputation = 'Yes' THEN 'HAD AMPUTATION'
+	WHEN public.Diabetes.kidney_complications = 'Yes' THEN 'KIDNEY COMPLICATIONS'
+	WHEN public.Diabetes.chest_pain = 'Yes' THEN 'CHEST PAIN'
+	WHEN public.Diabetes.body_swelling = 'Yes' THEN 'HAVE BODY SWELLING'
+	WHEN public.Diabetes.smoked_tobacco = 'Yes' THEN 'SMOKED TOBACCO'
+	WHEN public.Diabetes.smokeless_tobacco = 'Yes' THEN 'SMOKELESS TOBACCO'
+	WHEN public.Diabetes.alcohol = 'Yes' THEN 'DRINK ALCOHOL'
+	WHEN public.Diabetes.anaemic = 'Yes' THEN 'IS ANAEMIC'
+	WHEN public.Diabetes.dehydrated = 'Yes' THEN 'IS DEHYDRATED'
+	WHEN public.Diabetes.respondent_stand_up = 'Yes' THEN 'CAN STAND UP'
 	ELSE 'NO , DO NOT KNOW'
 	END AS observation_source_value, 
 0 AS observation_source_concept_id,
 'Individual' AS unit_source_value,
  NULL AS qualifier_source_value,
  NULL AS observation_event_id,
- 0 AS obs_event_field_concept_id,
- NULL AS value_as_datetime
- FROM public
+ 0 AS obs_event_field_concept_id
+ FROM public.Diabetes
 INNER JOIN public.PERSON
-ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.created_respondent_id AS INT);
+ON CAST(public.PERSON.person_source_value AS INT) = CAST(public.Diabetes.created_respondent_id AS INT);
 
  
  

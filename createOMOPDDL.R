@@ -23,19 +23,24 @@ CommonDataModel::buildRelease(cdmVersions = "5.4",
 #To start, you need to download DatabaseConnector in order to connect to your database.
 
 install.packages("DatabaseConnector")
-
+library(DatabaseConnector)
 #set JDBC drivers
 Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = "c:/temp/jdbcDrivers")
 downloadJdbcDrivers("postgresql")
 
-cd <- DatabaseConnector::createConnectionDetails(dbms = "postgresql",
-                                                 server = "localhost/dm",   #DATABASE NAME / CREATE DB USING PSQL SHELL
-                                                 user = "postgres",
-                                                 password = "",
-                                                 pathToDriver = "c:/temp/jdbcDrivers"
-)
 
- CommonDataModel::executeDdl(connectionDetails = cd,
+extraSettings <- ";databaseName=alpha;integratedSecurity=false;encrypt=false;trustServerCertificate=true;sslProtocol=TLSv1"
+
+cd <- DatabaseConnector::createConnectionDetails(dbms = "postgresql",
+                                                 server = "localhost/alpha",   #DATABASE NAME / CREATE DB USING PSQL SHELL
+                                                 user = "postgres",
+                                                 password = "aphrc",
+                                                 pathToDriver = "c:/temp/jdbcDrivers",
+                                                 extraSettings = extraSettings
+)
+conn <- connect(cd)
+
+CommonDataModel::executeDdl(connectionDetails = cd,
                             cdmVersion = "5.4",
                             cdmDatabaseSchema = "public"
 )

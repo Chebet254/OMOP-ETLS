@@ -17,12 +17,12 @@ library(DatabaseConnector)
 
 #set JDBC drivers
 Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = "c:/temp/jdbcDrivers")
-downloadJdbcDrivers("postgresql")
+#downloadJdbcDrivers("postgresql")
 
 cd <- DatabaseConnector::createConnectionDetails(dbms = "postgresql",
-                                                 server = "localhost/DM",   #DATABASE NAME 
+                                                 server = "localhost/dm",   #DATABASE NAME 
                                                  user = "postgres",
-                                                 password = "",
+                                                 password = "aphrc",
                                                  pathToDriver = "c:/temp/jdbcDrivers"
 )
 

@@ -5,7 +5,7 @@ cd <- DatabaseConnector::createConnectionDetails(
   dbms     = "postgresql", 
   server   = "localhost/synthea10", 
   user     = "postgres", 
-  password = "lollipop", 
+  password = "aphrc", 
   port     = 5432, 
   pathToDriver = "c:/temp/jdbcDrivers" 
 )

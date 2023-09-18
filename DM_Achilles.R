@@ -3,17 +3,19 @@ library(DatabaseConnector)
 library(ETLSyntheaBuilder) #for vocabulary loading 
 #set JDBC drivers
 Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = "c:/temp/jdbcDrivers")
-downloadJdbcDrivers("postgresql")
+#downloadJdbcDrivers("postgresql")
 
 #create connection
 connectiondetails <- DatabaseConnector::createConnectionDetails(
   dbms = "postgresql",
   server = "localhost/dm",
   user = "postgres",
-  password = "",
+  password = "aphrc",
   port = 5432,
   pathToDriver = "c:/temp/jdbcDrivers"
 )
+
+conn <- connect(connectiondetails)
 
 outputFolder <- "D:/APHRC/LHS project/OMOP ETL/dm_output"
 
@@ -29,7 +31,7 @@ Achilles::achilles(connectionDetails = connectiondetails,
                    outputFolder = outputFolder)
 
 #load vocabularies 
-cdmSchema      <- "vocabulary"
+cdmSchema      <- "vocab"
 cdmVersion     <- "5.4"
 vocabFileLoc   <- "/Vocabulary_download_v5"
 

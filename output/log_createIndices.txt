@@ -1,0 +1,45 @@
+2023-08-23 11:39:44	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 11:39:44	[Main thread]	FATAL	DatabaseConnector	.createErrorReport	Error executing SQL: org.postgresql.util.PSQLException: ERROR: relation "achillesresults.achilles_results" does not exist An error report has been created at  D:/APHRC/APHRC/LHS/OMOP ETL/OMOP-ETLS github/errorReportSql.txt
+2023-08-23 11:39:44	[Main thread]	INFO	DatabaseConnector	unregisterWithRStudio	An error occurred while the 'DatabaseConnector' package was updating the RStudio Connections pane: Error in NULL: host must be a single element of type 'character' If necessary, these warnings can be squelched by setting `options(rstudio.connectionObserver.errorsSuppressed = TRUE)`. 
+2023-08-23 11:41:40	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 11:46:21	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 11:46:21	[Main thread]	FATAL	rJava	.jcheck	org.postgresql.util.PSQLException: FATAL: password authentication failed for user "postgres"
+2023-08-23 11:46:33	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 11:46:33	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.31 secs
+2023-08-23 11:46:45	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 11:46:45	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.127 secs
+2023-08-23 11:47:10	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 11:47:20	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.0356 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.0227 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.0454 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.0111 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.0126 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00367 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00423 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00377 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00487 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00491 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00737 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00683 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00889 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.006 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00556 secs
+2023-08-23 11:47:36	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.015 secs
+2023-08-23 11:47:37	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.0144 secs
+2023-08-23 11:47:37	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00291 secs
+2023-08-23 11:47:37	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00392 secs
+2023-08-23 11:47:37	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00276 secs
+2023-08-23 11:47:37	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00373 secs
+2023-08-23 11:47:37	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.00869 secs
+2023-08-23 11:48:32	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 11:48:57	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 11:50:04	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 13:56:32	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 13:56:32	[Main thread]	FATAL	rJava	.jcheck	org.postgresql.util.PSQLException: FATAL: database "alpha" does not exist
+2023-08-23 13:56:57	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 13:56:59	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-08-23 13:56:59	[Main thread]	INFO	DatabaseConnector	executeSql	Executing SQL took 0.593 secs

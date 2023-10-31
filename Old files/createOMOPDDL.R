@@ -26,7 +26,7 @@ install.packages("DatabaseConnector")
 library(DatabaseConnector)
 #set JDBC drivers
 Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = "c:/temp/jdbcDrivers")
-downloadJdbcDrivers("postgresql")
+#downloadJdbcDrivers("postgresql")
 
 
 extraSettings <- ";databaseName=alpha;integratedSecurity=false;encrypt=false;trustServerCertificate=true;sslProtocol=TLSv1"

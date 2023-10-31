@@ -1,0 +1,2 @@
+cdm_source_name	cdm_source_abbreviation	cdm_holder	source_description	source_documentation_reference	cdm_etl_reference	source_release_date	cdm_release_date	cdm_version	cdm_version_concept_id	vocabulary_version
+CDM IDSR Generic Synthetic v3.1 Database	IDSR_GEN_SYN_v3_1	OHDSI	WHO IDSR Data - Generic Synthetic V3.1	https://github.com/tathagatabhattacharjee/Generic-IDSR-COVID-19-data-to-OMOP-6.0-under-INSPIRE-Project	https://github.com/tathagatabhattacharjee/Generic-IDSR-COVID-19-data-to-OMOP-6.0-under-INSPIRE-Project	2023-07-31	2023-08-01	5.4	756265	v5.0 31-MAY-23

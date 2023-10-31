@@ -1,0 +1,21 @@
+SELECT 'concept' AS table_name, COUNT(*) FROM concept
+UNION
+SELECT 'cohort' AS table_name, COUNT(*) FROM cohort
+UNION
+SELECT 'cohort_definition' AS table_name, COUNT(*) FROM cohort_definition
+UNION
+SELECT 'concept_ancestor' AS table_name, COUNT(*) FROM concept_ancestor
+UNION
+SELECT 'concept_class' AS table_name, COUNT(*) FROM concept_class
+UNION
+SELECT 'concept_relationship' AS table_name, COUNT(*) FROM concept_relationship
+UNION
+SELECT 'concept_synonym' AS table_name, COUNT(*) FROM concept_synonym
+UNION
+SELECT 'domain' AS table_name, COUNT(*) FROM domain
+UNION
+SELECT 'drug_strength' AS table_name, COUNT(*) FROM drug_strength
+UNION
+SELECT 'relationship' AS table_name, COUNT(*) FROM relationship
+UNION
+SELECT 'vocabulary' AS table_name, COUNT(*) FROM vocabulary

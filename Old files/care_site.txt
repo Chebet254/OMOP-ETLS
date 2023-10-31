@@ -1,0 +1,11 @@
+care_site_id	care_site_name	place_of_service_concept_id	location_id	care_site_source_value	place_of_service_source_value
+1	Empire Health Services	4139501	51300	Empire Health Services	Wakanda
+2	Health and Treatment Center	4139501	51301	Health and Treatment Center	Wakanda
+3	Jungle Healthcare Center	4139501	51302	Jungle Healthcare Center	Wakanda
+4	Knowledge Healthcare and Support Center	4139501	51303	Knowledge Healthcare and Support Center	Wakanda
+5	Public Healthcare Services Center	4139501	51304	Public Healthcare Services Center	Wakanda
+6	Royal Healthcare	4139501	51305	Royal Healthcare	Wakanda
+7	Rural Health Center of Wakanda	4139501	51306	Rural Health Center of Wakanda	Wakanda
+8	Tower Health Center	4139501	51307	Tower Health Center	Wakanda
+9	Village Healthcare Center	4139501	51308	Village Healthcare Center	Wakanda
+10	Warriors Healthcare Center	4139501	51309	Warriors Healthcare Center	Wakanda

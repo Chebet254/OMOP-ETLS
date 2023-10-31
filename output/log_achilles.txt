@@ -1017,3 +1017,7 @@
 2023-08-23 11:39:44	[Main thread]	INFO	Achilles	achilles	Temporary Achilles tables removed from schema #
 2023-08-23 11:39:44	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
 2023-08-23 11:39:44	[Main thread]	FATAL	DatabaseConnector	.createErrorReport	Error executing SQL: org.postgresql.util.PSQLException: ERROR: relation "achillesresults.achilles_results" does not exist An error report has been created at  D:/APHRC/APHRC/LHS/OMOP ETL/OMOP-ETLS github/errorReportSql.txt
+2023-09-18 11:21:58	[Main thread]	INFO	Achilles	achilles	CDM Version 5.4 passed as parameter.
+2023-09-18 11:21:58	[Main thread]	INFO	Achilles	achilles	Beginning single-threaded execution
+2023-09-18 11:21:58	[Main thread]	INFO	DatabaseConnector	connectPostgreSql	Connecting using PostgreSQL driver
+2023-09-18 11:21:58	[Main thread]	FATAL	DatabaseConnector	.createErrorReport	Error executing SQL: org.postgresql.util.PSQLException: ERROR: schema "achillesresults" does not exist   Position: 14 An error report has been created at  D:/APHRC/LHS/OMOP ETL/OMOP-ETLS github/output/achillesErrorCreateAchillesAnalysis.txt

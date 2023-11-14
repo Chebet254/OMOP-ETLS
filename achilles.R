@@ -18,13 +18,6 @@ connectiondetails <- DatabaseConnector::createConnectionDetails(
 
 outputFolder <- "D:/APHRC/LHS/OMOP ETL/OMOP-ETLS github/output"
 
-#load vocabularies 
-cdmSchema      <- "vocabulary"
-cdmVersion     <- "5.4"
-vocabFileLoc   <- "/Vocabulary_download_v5"
-
-#CreateCDMTables(connectionDetails = connectiondetails, cdmSchema = cdmSchema, cdmVersion = cdmVersion)
-LoadVocabFromCsv(connectionDetails = connectiondetails, cdmSchema = cdmSchema, vocabFileLoc = vocabFileLoc)
 
 #run achilles
 

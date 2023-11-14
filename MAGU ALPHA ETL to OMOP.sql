@@ -5,51 +5,51 @@ set datestyle to DMY;
 --ALTER TABLES TO DROP CONSTRAINTS 
 --REMEMBER TO ADD CONSTRAINTS AFTER ADDING SOURCE DATA
 BEGIN;
-ALTER TABLE public.concept DROP CONSTRAINT fpk_concept_domain_id;
-ALTER TABLE public.concept DROP CONSTRAINT fpk_concept_vocabulary_id;
-ALTER TABLE public.concept DROP CONSTRAINT fpk_concept_concept_class_id;
-ALTER TABLE public.concept_relationship DROP CONSTRAINT fpk_concept_relationship_relationship_id;
-ALTER TABLE public.concept_relationship DROP CONSTRAINT fpk_concept_relationship_concept_id_2;
-ALTER TABLE public.concept_relationship DROP CONSTRAINT fpk_concept_relationship_concept_id_1;
-ALTER TABLE public.CONCEPT_ANCESTOR DROP CONSTRAINT fpk_concept_ancestor_ancestor_concept_id;
-ALTER TABLE public.CONCEPT_ANCESTOR DROP CONSTRAINT fpk_concept_ancestor_descendant_concept_id;
-ALTER TABLE public.CONCEPT_SYNONYM DROP CONSTRAINT fpk_concept_synonym_concept_id;
+ALTER TABLE cdm_magu.concept DROP CONSTRAINT fpk_concept_domain_id;
+ALTER TABLE cdm_magu.concept DROP CONSTRAINT fpk_concept_vocabulary_id;
+ALTER TABLE cdm_magu.concept DROP CONSTRAINT fpk_concept_concept_class_id;
+ALTER TABLE cdm_magu.concept_relationship DROP CONSTRAINT fpk_concept_relationship_relationship_id;
+ALTER TABLE cdm_magu.concept_relationship DROP CONSTRAINT fpk_concept_relationship_concept_id_2;
+ALTER TABLE cdm_magu.concept_relationship DROP CONSTRAINT fpk_concept_relationship_concept_id_1;
+ALTER TABLE cdm_magu.CONCEPT_ANCESTOR DROP CONSTRAINT fpk_concept_ancestor_ancestor_concept_id;
+ALTER TABLE cdm_magu.CONCEPT_ANCESTOR DROP CONSTRAINT fpk_concept_ancestor_descendant_concept_id;
+ALTER TABLE cdm_magu.CONCEPT_SYNONYM DROP CONSTRAINT fpk_concept_synonym_concept_id;
 END;
 --LOAD OMOP VOCABS --SINCE UPDATED, DONT RUN THIS
 BEGIN;
-COPY PUBLIC.CONCEPT FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\CONCEPT.csv'
+COPY cdm_magu.CONCEPT FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\CONCEPT.csv'
 WITH DELIMITER E'\t' 
 CSV HEADER QUOTE E'\b';
 
-COPY public.CONCEPT_RELATIONSHIP FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\CONCEPT_RELATIONSHIP.csv' 
+COPY cdm_magu.CONCEPT_RELATIONSHIP FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\CONCEPT_RELATIONSHIP.csv' 
 WITH DELIMITER E'\t' 
 CSV HEADER QUOTE E'\b';
 
-COPY public.CONCEPT_ANCESTOR FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\CONCEPT_ANCESTOR.csv'
+COPY cdm_magu.CONCEPT_ANCESTOR FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\CONCEPT_ANCESTOR.csv'
 WITH DELIMITER E'\t' 
 CSV HEADER QUOTE E'\b';
 
-COPY public.CONCEPT_SYNONYM FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\CONCEPT_SYNONYM.csv'
+COPY cdm_magu.CONCEPT_SYNONYM FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\CONCEPT_SYNONYM.csv'
 WITH DELIMITER E'\t' 
 CSV HEADER QUOTE E'\b' ;
 
-COPY PUBLIC.DRUG_STRENGTH FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\DRUG_STRENGTH.csv' 
+COPY cdm_magu.DRUG_STRENGTH FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\DRUG_STRENGTH.csv' 
 WITH DELIMITER E'\t' 
 CSV HEADER QUOTE E'\b';
 
-COPY public.VOCABULARY FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\VOCABULARY.csv'
+COPY cdm_magu.VOCABULARY FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\VOCABULARY.csv'
 WITH DELIMITER E'\t' 
 CSV HEADER QUOTE E'\b' ;
 
-COPY public.RELATIONSHIP FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\RELATIONSHIP.csv'
+COPY cdm_magu.RELATIONSHIP FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\RELATIONSHIP.csv'
 WITH DELIMITER E'\t' 
 CSV HEADER QUOTE E'\b' ;
 
-COPY public.CONCEPT_CLASS FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\CONCEPT_CLASS.csv'
+COPY cdm_magu.CONCEPT_CLASS FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\CONCEPT_CLASS.csv'
 WITH DELIMITER E'\t' 
 CSV HEADER QUOTE E'\b' ;
 
-COPY PUBLIC.DOMAIN FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\DOMAIN.csv'
+COPY cdm_magu.DOMAIN FROM 'D:\APHRC\LHS\OMOP ETL\vocabulary_download_v5\DOMAIN.csv'
 WITH DELIMITER E'\t' 
 CSV HEADER QUOTE E'\b' ;
 END; 
@@ -81,15 +81,15 @@ NULL 'NA';
 
 --INSERT DATA TO OMOP FROM SOURCE DATA
 --REMOVE CONSTRAINTS
-ALTER TABLE public.person DROP CONSTRAINT fpk_person_location_id;
+ALTER TABLE cdm_magu.person DROP CONSTRAINT fpk_person_location_id;
 COMMIT;
-CREATE SEQUENCE public.person_id_seq;
+CREATE SEQUENCE cdm_magu.person_id_seq;
 
 --INSERT DATA TO PERSON TABLE 
-ALTER TABLE public.person ALTER COLUMN year_of_birth DROP NOT NULL;
+ALTER TABLE cdm_magu.person ALTER COLUMN year_of_birth DROP NOT NULL;
 
 BEGIN;
-INSERT INTO public.person
+INSERT INTO cdm_magu.person
 (
 person_id,
 gender_concept_id,
@@ -112,7 +112,7 @@ ethnicity_source_concept_id
 )
 SELECT
 DISTINCT ON (idno)
-NEXTVAL('public.person_id_seq') AS person_id,
+NEXTVAL('cdm_magu.person_id_seq') AS person_id,
 CASE WHEN native_tables.residencies.sex::int = 1 THEN 8507
  WHEN native_tables.residencies.sex::int = 2 THEN 8532
  WHEN native_tables.residencies.sex::int = 9 THEN 0
@@ -139,12 +139,12 @@ ORDER BY idno, entry_date DESC;
 END;
 
 --OBSERVATION PERIOD TABLE 
-CREATE SEQUENCE public.observation_period_id_seq;
+CREATE SEQUENCE cdm_magu.observation_period_id_seq;
 --alter not null constraint
-ALTER TABLE public.observation_period ALTER COLUMN observation_period_end_date DROP NOT NULL;
+ALTER TABLE cdm_magu.observation_period ALTER COLUMN observation_period_end_date DROP NOT NULL;
 
 BEGIN;
-INSERT INTO PUBLIC.observation_period
+INSERT INTO cdm_magu.observation_period
 (
  observation_period_id,
 person_id,
@@ -153,22 +153,22 @@ observation_period_start_date,
  period_type_concept_id
 )
 SELECT
- NEXTVAL('public.observation_period_id_seq') AS observation_period_id,
- public.person.person_id AS person_id,
+ NEXTVAL('cdm_magu.observation_period_id_seq') AS observation_period_id,
+ cdm_magu.person.person_id AS person_id,
  native_tables.residencies.entry_date::DATE AS observation_period_start_date,
  native_tables.residencies.exit_date::DATE AS observation_period_end_date,
  44814723 AS period_type_concept_id
 FROM native_tables.residencies
-INNER JOIN public.person
-ON CAST(public.person.person_source_value AS BIGINT) = CAST(native_tables.residencies.idno AS BIGINT);
+INNER JOIN cdm_magu.person
+ON CAST(cdm_magu.person.person_source_value AS BIGINT) = CAST(native_tables.residencies.idno AS BIGINT);
 END;
 
 COMMIT;
 --OBSERVATION TABLE 
-CREATE SEQUENCE public.observation_id_seq;
+CREATE SEQUENCE cdm_magu.observation_id_seq;
 --i)	Insert episode end/exit to convert to long format.
 BEGIN;
-INSERT INTO public.observation
+INSERT INTO cdm_magu.observation
 (
  observation_id,
  person_id,
@@ -192,8 +192,8 @@ INSERT INTO public.observation
  obs_event_field_concept_id
 )
 SELECT
- NEXTVAL('public.observation_id_seq') AS observation_id,
- public.person.person_id AS person_id,
+ NEXTVAL('cdm_magu.observation_id_seq') AS observation_id,
+ cdm_magu.person.person_id AS person_id,
 4295659 AS observation_concept_id,
  native_tables.residencies.entry_date::DATE AS observation_date,
  CASE WHEN native_tables.residencies.entry_date::TIMESTAMP IS NULL THEN '9999-12-31 00:00:00'
@@ -221,16 +221,16 @@ native_tables.residencies.entry_type AS observation_source_value,
  NULL AS observation_event_id,
  0 AS obs_event_field_concept_id
 FROM native_tables.residencies
-INNER JOIN public.person
-ON CAST(public.person.person_source_value AS BIGINT) = CAST(native_tables.residencies.idno AS BIGINT);
+INNER JOIN cdm_magu.person
+ON CAST(cdm_magu.person.person_source_value AS BIGINT) = CAST(native_tables.residencies.idno AS BIGINT);
 END;
 
 --ii)	Insert episode end/exit to convert to long format.
-ALTER TABLE public.observation ALTER COLUMN observation_date DROP NOT NULL;
-ALTER TABLE public.observation DROP CONSTRAINT fpk_observation_value_as_concept_id;
+ALTER TABLE cdm_magu.observation ALTER COLUMN observation_date DROP NOT NULL;
+ALTER TABLE cdm_magu.observation DROP CONSTRAINT fpk_observation_value_as_concept_id;
 
 BEGIN;
-INSERT INTO public.observation
+INSERT INTO cdm_magu.observation
 (
  observation_id,
  person_id,
@@ -254,8 +254,8 @@ INSERT INTO public.observation
  obs_event_field_concept_id
 )
 SELECT
- NEXTVAL('public.observation_id_seq') AS observation_id,
- public.person.person_id AS person_id,
+ NEXTVAL('cdm_magu.observation_id_seq') AS observation_id,
+ cdm_magu.person.person_id AS person_id,
 4295659 AS observation_concept_id,
  residencies.exit_date::DATE AS observation_date,
  CASE WHEN native_tables.residencies.exit_date::DATE IS NULL THEN '9999-12-31 00:00:00'
@@ -284,16 +284,16 @@ END AS qualifier_concept_id,
  NULL AS observation_event_id,
  0 AS obs_event_field_concept_id
 FROM native_tables.residencies
-INNER JOIN public.person
-ON CAST(public.person.person_source_value AS BIGINT) = CAST(native_tables.residencies.idno AS BIGINT);
+INNER JOIN cdm_magu.person
+ON CAST(cdm_magu.person.person_source_value AS BIGINT) = CAST(native_tables.residencies.idno AS BIGINT);
 END;
 
 
 --INSERT DATA INTO LOCATION TABLE 
-CREATE SEQUENCE public.location_id_seq;
+CREATE SEQUENCE cdm_magu.location_id_seq;
 COMMIT;
 BEGIN;
-INSERT into public.location
+INSERT into cdm_magu.location
 (
 	location_id,
 	address_1,
@@ -309,7 +309,7 @@ INSERT into public.location
 	longitude
 )
 SELECT
-NEXTVAL('public.location_id_seq') AS location_id,	
+NEXTVAL('cdm_magu.location_id_seq') AS location_id,	
 	NULL AS address_1,
 	NULL AS address_2,
 	'Mwanza' AS city, 
@@ -322,14 +322,14 @@ NEXTVAL('public.location_id_seq') AS location_id,
 	'-2.55' AS latitude, 
 	'33.03333' AS longitude 
 FROM native_tables.residencies
-INNER JOIN public.person
-ON CAST(public.person.person_source_value AS BIGINT) = CAST(native_tables.residencies.idno AS BIGINT);
+INNER JOIN cdm_magu.person
+ON CAST(cdm_magu.person.person_source_value AS BIGINT) = CAST(native_tables.residencies.idno AS BIGINT);
 END;
 
 --DEATH TABLE
-ALTER TABLE public.death ALTER COLUMN death_date DROP NOT NULL;
+ALTER TABLE cdm_magu.death ALTER COLUMN death_date DROP NOT NULL;
 BEGIN;
-INSERT INTO public.death 
+INSERT INTO cdm_magu.death 
 (
 	person_id,
 	death_date,
@@ -339,7 +339,7 @@ INSERT INTO public.death
 	cause_source_value,
 	cause_source_concept_id	
 )
-SELECT public.person.person_id AS person_id,	
+SELECT cdm_magu.person.person_id AS person_id,	
 	native_tables.residencies.exit_date::DATE AS death_date,
 	native_tables.residencies.exit_date::DATE AS death_datetime,
 	32809 AS death_type_concept_id,
@@ -347,8 +347,8 @@ SELECT public.person.person_id AS person_id,
 	NULL AS cause_source_value,
 	NULL AS cause_source_concept_id
 FROM native_tables.residencies
-INNER JOIN public.person
-ON CAST(public.person.person_source_value AS BIGINT) = CAST(native_tables.residencies.idno AS BIGINT)
+INNER JOIN cdm_magu.person
+ON CAST(cdm_magu.person.person_source_value AS BIGINT) = CAST(native_tables.residencies.idno AS BIGINT)
 WHERE native_tables.residencies.exit_type = 'Death';
 END;
 
@@ -375,10 +375,10 @@ CSV HEADER
 NULL 'NA';
 
 --VISIT OCCURRENCE TABLE
-CREATE SEQUENCE public.visit_occurrence_id_seq;
+CREATE SEQUENCE cdm_magu.visit_occurrence_id_seq;
 
 BEGIN;
-INSERT INTO public.visit_occurrence
+INSERT INTO cdm_magu.visit_occurrence
 (
  visit_occurrence_id,
  person_id,
@@ -398,8 +398,8 @@ INSERT INTO public.visit_occurrence
  discharged_to_source_value,
  preceding_visit_occurrence_id)
 SELECT
-NEXTVAL('public.visit_occurrence_id_seq') AS visit_occurrence_id,
- public.person.person_id AS person_id,
+NEXTVAL('cdm_magu.visit_occurrence_id_seq') AS visit_occurrence_id,
+ cdm_magu.person.person_id AS person_id,
  4119839 AS visit_concept_id,
 native_tables.hiv_test.hiv_test_date::DATE AS visit_start_date,
 CASE WHEN native_tables.hiv_test.hiv_test_date::DATE IS NULL THEN '9999-12-31'
@@ -420,14 +420,14 @@ END AS visit_end_datetime,
  NULL AS discharge_to_source_value,
  NULL AS preceding_visit_occurrence_id
 FROM native_tables.hiv_test
-INNER JOIN public.person
-ON CAST(public.person.person_source_value AS BIGINT) = CAST(native_tables.hiv_test.id_no AS BIGINT);
+INNER JOIN cdm_magu.person
+ON CAST(cdm_magu.person.person_source_value AS BIGINT) = CAST(native_tables.hiv_test.id_no AS BIGINT);
 END;
 
 --CONDITION OCC
-CREATE SEQUENCE public.condition_occurrence_id_seq;
+CREATE SEQUENCE cdm_magu.condition_occurrence_id_seq;
 BEGIN;
-INSERT INTO public.condition_occurrence
+INSERT INTO cdm_magu.condition_occurrence
 (
  condition_occurrence_id,
  person_id,
@@ -447,8 +447,8 @@ INSERT INTO public.condition_occurrence
  condition_status_source_value
 )
 SELECT
-NEXTVAL('public.condition_occurrence_id_seq') AS condition_occurrence_id,
- public.person.person_id AS person_id,
+NEXTVAL('cdm_magu.condition_occurrence_id_seq') AS condition_occurrence_id,
+ cdm_magu.person.person_id AS person_id,
  CASE WHEN native_tables.hiv_test.hiv_test_result = 'Negative' THEN 4013105
  WHEN native_tables.hiv_test.hiv_test_result = 'Positive' THEN 4013106
  WHEN native_tables.hiv_test.hiv_test_result::INT = 9 THEN 4088484
@@ -470,15 +470,15 @@ NEXTVAL('public.condition_occurrence_id_seq') AS condition_occurrence_id,
  0 AS condition_source_concept_id,
  NULL AS condition_status_source_value
 FROM native_tables.hiv_test
-INNER JOIN public.person
-ON CAST(public.person.person_source_value AS BIGINT) = CAST(native_tables.hiv_test.id_no AS BIGINT);
+INNER JOIN cdm_magu.person
+ON CAST(cdm_magu.person.person_source_value AS BIGINT) = CAST(native_tables.hiv_test.id_no AS BIGINT);
 END;
 
 COMMIT;
 --CARE SITE TABLE 
-CREATE SEQUENCE public.care_site_id_seq;
+CREATE SEQUENCE cdm_magu.care_site_id_seq;
 BEGIN;
-Insert into public.care_Site
+Insert into cdm_magu.care_Site
 (
  	care_site_id,
 	care_site_name,
@@ -488,22 +488,22 @@ Insert into public.care_Site
 	place_of_service_source_value
 )
 SELECT
-NEXTVAL('public.care_site_id_seq') AS care_site_id,
+NEXTVAL('cdm_magu.care_site_id_seq') AS care_site_id,
  native_tables.residencies.study_name AS care_site_name,
  4207294 AS place_of_service_concept_id, --inpatient,
  NULL AS location_id, 
  NULL AS care_site_source_value, 
  NULL AS place_of_service_source_value
 FROM native_tables.residencies
-INNER JOIN public.person
-ON CAST(public.person.person_source_value AS BIGINT) = CAST(native_tables.residencies.idno AS BIGINT);
+INNER JOIN cdm_magu.person
+ON CAST(cdm_magu.person.person_source_value AS BIGINT) = CAST(native_tables.residencies.idno AS BIGINT);
 END;
 
 --CDM SOURCE TABLE
-DELETE FROM public.CDM_SOURCE
+DELETE FROM cdm_magu.CDM_SOURCE
 
 BEGIN;
-Insert into public.cdm_source(
+Insert into cdm_magu.cdm_source(
 	cdm_source_name, 
 	cdm_source_abbreviation,
 	cdm_holder,
@@ -842,18 +842,18 @@ FROM (
 	SELECT
 		concept_id,
 		concept_name
-	FROM public.concept
+	FROM cdm_magu.concept
 	WHERE domain_id = 'Condition'
 ) snomed
 LEFT JOIN (
 	SELECT
 		c1.concept_id      AS snomed_concept_id,
 		max(c2.concept_id) AS pt_concept_id
-	FROM public.concept c1
-	INNER JOIN public.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
+	FROM cdm_magu.concept c1
+	INNER JOIN cdm_magu.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
 		AND c1.domain_id = 'Condition'
 		AND ca1.min_levels_of_separation = 1
-	INNER JOIN public.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
+	INNER JOIN cdm_magu.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
 		AND c2.vocabulary_id = 'MedDRA'
 	GROUP BY c1.concept_id
 ) snomed_to_pt ON snomed.concept_id = snomed_to_pt.snomed_concept_id
@@ -862,11 +862,11 @@ LEFT JOIN (
 		c1.concept_id      AS pt_concept_id,
 		c1.concept_name    AS pt_concept_name,
 		max(c2.concept_id) AS hlt_concept_id
-	FROM public.concept c1
-	INNER JOIN public.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
+	FROM cdm_magu.concept c1
+	INNER JOIN cdm_magu.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
 		AND c1.vocabulary_id = 'MedDRA'
 		AND ca1.min_levels_of_separation = 1
-	INNER JOIN public.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
+	INNER JOIN cdm_magu.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
 		AND c2.vocabulary_id = 'MedDRA'
 	GROUP BY c1.concept_id, c1.concept_name
 ) pt_to_hlt ON snomed_to_pt.pt_concept_id = pt_to_hlt.pt_concept_id
@@ -875,11 +875,11 @@ LEFT JOIN (
 		c1.concept_id      AS hlt_concept_id,
 		c1.concept_name    AS hlt_concept_name,
 		max(c2.concept_id) AS hlgt_concept_id
-	FROM public.concept c1
-	INNER JOIN public.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
+	FROM cdm_magu.concept c1
+	INNER JOIN cdm_magu.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
 		AND c1.vocabulary_id = 'MedDRA'
 		AND ca1.min_levels_of_separation = 1
-	INNER JOIN public.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
+	INNER JOIN cdm_magu.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
 		AND c2.vocabulary_id = 'MedDRA'
 	GROUP BY c1.concept_id, c1.concept_name
 ) hlt_to_hlgt ON pt_to_hlt.hlt_concept_id = hlt_to_hlgt.hlt_concept_id
@@ -888,15 +888,15 @@ LEFT JOIN (
 		c1.concept_id      AS hlgt_concept_id,
 		c1.concept_name    AS hlgt_concept_name,
 		max(c2.concept_id) AS soc_concept_id
-	FROM public.concept c1
-	INNER JOIN public.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
+	FROM cdm_magu.concept c1
+	INNER JOIN cdm_magu.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
 		AND c1.vocabulary_id = 'MedDRA'
 		AND ca1.min_levels_of_separation = 1
-	INNER JOIN public.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
+	INNER JOIN cdm_magu.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
 		AND c2.vocabulary_id = 'MedDRA'
 	GROUP BY c1.concept_id, c1.concept_name
 ) hlgt_to_soc ON hlt_to_hlgt.hlgt_concept_id = hlgt_to_soc.hlgt_concept_id
-LEFT JOIN public.concept soc ON hlgt_to_soc.soc_concept_id = soc.concept_id;
+LEFT JOIN cdm_magu.concept soc ON hlgt_to_soc.soc_concept_id = soc.concept_id;
 
 /********** DRUG **********/
 INSERT INTO magu_results.concept_hierarchy
@@ -916,10 +916,10 @@ FROM (
 		c1.concept_name,
 		c2.concept_id   AS rxnorm_ingredient_concept_id,
 		c2.concept_name AS RxNorm_ingredient_concept_name
-	FROM public.concept c1
-	INNER JOIN public.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
+	FROM cdm_magu.concept c1
+	INNER JOIN cdm_magu.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
 		AND c1.domain_id = 'Drug'
-	INNER JOIN public.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
+	INNER JOIN cdm_magu.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
 		AND c2.domain_id = 'Drug'
 		AND c2.concept_class_id = 'Ingredient'
 ) rxnorm
@@ -927,11 +927,11 @@ LEFT JOIN (
 	SELECT
 		c1.concept_id      AS rxnorm_ingredient_concept_id,
 		max(c2.concept_id) AS atc5_concept_id
-	FROM public.concept c1
-	INNER JOIN public.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
+	FROM cdm_magu.concept c1
+	INNER JOIN cdm_magu.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
 		AND c1.domain_id = 'Drug'
 		AND c1.concept_class_id = 'Ingredient'
-	INNER JOIN public.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
+	INNER JOIN cdm_magu.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
 		AND c2.vocabulary_id = 'ATC'
 		AND c2.concept_class_id = 'ATC 4th'
 	GROUP BY c1.concept_id
@@ -941,11 +941,11 @@ LEFT JOIN (
 		c1.concept_id      AS atc5_concept_id,
 		c1.concept_name    AS atc5_concept_name,
 		max(c2.concept_id) AS atc3_concept_id
-	FROM public.concept c1
-	INNER JOIN public.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
+	FROM cdm_magu.concept c1
+	INNER JOIN cdm_magu.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
 		AND c1.vocabulary_id = 'ATC'
 		AND c1.concept_class_id = 'ATC 4th'
-	INNER JOIN public.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
+	INNER JOIN cdm_magu.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
 		AND c2.vocabulary_id = 'ATC'
 		AND c2.concept_class_id = 'ATC 2nd'
 	GROUP BY c1.concept_id, c1.concept_name
@@ -955,16 +955,16 @@ LEFT JOIN (
 		c1.concept_id      AS atc3_concept_id,
 		c1.concept_name    AS atc3_concept_name,
 		max(c2.concept_id) AS atc1_concept_id
-	FROM public.concept c1
-	INNER JOIN public.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
+	FROM cdm_magu.concept c1
+	INNER JOIN cdm_magu.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
 		AND c1.vocabulary_id = 'ATC'
 		AND c1.concept_class_id = 'ATC 2nd'
-	INNER JOIN public.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
+	INNER JOIN cdm_magu.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
 		AND c2.vocabulary_id = 'ATC'
 		AND c2.concept_class_id = 'ATC 1st'
 	GROUP BY c1.concept_id, c1.concept_name
 ) atc3_to_atc1 ON atc5_to_atc3.atc3_concept_id = atc3_to_atc1.atc3_concept_id
-LEFT JOIN public.concept atc1 ON atc3_to_atc1.atc1_concept_id = atc1.concept_id;
+LEFT JOIN cdm_magu.concept atc1 ON atc3_to_atc1.atc1_concept_id = atc1.concept_id;
 
 /********** DRUG_ERA **********/
 INSERT INTO magu_results.concept_hierarchy
@@ -982,7 +982,7 @@ FROM (
 	SELECT
 		c2.concept_id   AS rxnorm_ingredient_concept_id,
 		c2.concept_name AS RxNorm_ingredient_concept_name
-	FROM public.concept c2
+	FROM cdm_magu.concept c2
 	WHERE c2.domain_id = 'Drug'
 		AND c2.concept_class_id = 'Ingredient'
 ) rxnorm
@@ -990,11 +990,11 @@ LEFT JOIN (
 	SELECT
 		c1.concept_id      AS rxnorm_ingredient_concept_id,
 		max(c2.concept_id) AS atc5_concept_id
-	FROM public.concept c1
-	INNER JOIN public.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
+	FROM cdm_magu.concept c1
+	INNER JOIN cdm_magu.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
 		AND c1.domain_id = 'Drug'
 		AND c1.concept_class_id = 'Ingredient'
-	INNER JOIN public.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
+	INNER JOIN cdm_magu.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
 		AND c2.vocabulary_id = 'ATC'
 		AND c2.concept_class_id = 'ATC 4th'
 	GROUP BY c1.concept_id
@@ -1004,11 +1004,11 @@ LEFT JOIN (
 		c1.concept_id      AS atc5_concept_id,
 		c1.concept_name    AS atc5_concept_name,
 		max(c2.concept_id) AS atc3_concept_id
-	FROM public.concept c1
-	INNER JOIN public.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
+	FROM cdm_magu.concept c1
+	INNER JOIN cdm_magu.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
 		AND c1.vocabulary_id = 'ATC'
 		AND c1.concept_class_id = 'ATC 4th'
-	INNER JOIN public.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
+	INNER JOIN cdm_magu.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
 		AND c2.vocabulary_id = 'ATC'
 		AND c2.concept_class_id = 'ATC 2nd'
 	GROUP BY c1.concept_id, c1.concept_name
@@ -1018,16 +1018,16 @@ LEFT JOIN (
 		c1.concept_id      AS atc3_concept_id,
 		c1.concept_name    AS atc3_concept_name,
 		max(c2.concept_id) AS atc1_concept_id
-	FROM public.concept c1
-	INNER JOIN public.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
+	FROM cdm_magu.concept c1
+	INNER JOIN cdm_magu.concept_ancestor ca1 ON c1.concept_id = ca1.descendant_concept_id
 		AND c1.vocabulary_id = 'ATC'
 		AND c1.concept_class_id = 'ATC 2nd'
-	INNER JOIN public.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
+	INNER JOIN cdm_magu.concept c2 ON ca1.ancestor_concept_id = c2.concept_id
 		AND c2.vocabulary_id = 'ATC'
 		AND c2.concept_class_id = 'ATC 1st'
 	GROUP BY c1.concept_id, c1.concept_name
 ) atc3_to_atc1 ON atc5_to_atc3.atc3_concept_id = atc3_to_atc1.atc3_concept_id
-LEFT JOIN public.concept atc1 ON atc3_to_atc1.atc1_concept_id = atc1.concept_id;
+LEFT JOIN cdm_magu.concept atc1 ON atc3_to_atc1.atc1_concept_id = atc1.concept_id;
 
 /********** MEASUREMENT **********/
 INSERT INTO magu_results.concept_hierarchy
@@ -1045,15 +1045,15 @@ FROM (
 	SELECT DISTINCT
 		concept_id,
 		concept_name
-	FROM public.concept c
+	FROM cdm_magu.concept c
 	WHERE domain_id = 'Measurement'
 ) m
-LEFT JOIN public.concept_ancestor ca1 ON M.concept_id = ca1.DESCENDANT_CONCEPT_ID AND ca1.min_levels_of_separation = 1
-LEFT JOIN public.concept c1 ON ca1.ANCESTOR_CONCEPT_ID = c1.concept_id
-LEFT JOIN public.concept_ancestor ca2 ON c1.concept_id = ca2.DESCENDANT_CONCEPT_ID AND ca2.min_levels_of_separation = 1
-LEFT JOIN public.concept c2 ON ca2.ANCESTOR_CONCEPT_ID = c2.concept_id
-LEFT JOIN public.concept_ancestor ca3 ON c2.concept_id = ca3.DESCENDANT_CONCEPT_ID AND ca3.min_levels_of_separation = 1
-LEFT JOIN public.concept c3 ON ca3.ANCESTOR_CONCEPT_ID = c3.concept_id
+LEFT JOIN cdm_magu.concept_ancestor ca1 ON M.concept_id = ca1.DESCENDANT_CONCEPT_ID AND ca1.min_levels_of_separation = 1
+LEFT JOIN cdm_magu.concept c1 ON ca1.ANCESTOR_CONCEPT_ID = c1.concept_id
+LEFT JOIN cdm_magu.concept_ancestor ca2 ON c1.concept_id = ca2.DESCENDANT_CONCEPT_ID AND ca2.min_levels_of_separation = 1
+LEFT JOIN cdm_magu.concept c2 ON ca2.ANCESTOR_CONCEPT_ID = c2.concept_id
+LEFT JOIN cdm_magu.concept_ancestor ca3 ON c2.concept_id = ca3.DESCENDANT_CONCEPT_ID AND ca3.min_levels_of_separation = 1
+LEFT JOIN cdm_magu.concept c3 ON ca3.ANCESTOR_CONCEPT_ID = c3.concept_id
 GROUP BY M.concept_id, M.concept_name;
 
 /********** OBSERVATION **********/
@@ -1072,15 +1072,15 @@ FROM (
 	SELECT
 		concept_id,
 		concept_name
-	FROM public.concept
+	FROM cdm_magu.concept
 	WHERE domain_id = 'Observation'
 ) obs
-LEFT JOIN public.concept_ancestor ca1 ON obs.concept_id = ca1.DESCENDANT_CONCEPT_ID AND ca1.min_levels_of_separation = 1
-LEFT JOIN public.concept c1 ON ca1.ANCESTOR_CONCEPT_ID = c1.concept_id
-LEFT JOIN public.concept_ancestor ca2 ON c1.concept_id = ca2.DESCENDANT_CONCEPT_ID AND ca2.min_levels_of_separation = 1
-LEFT JOIN public.concept c2 ON ca2.ANCESTOR_CONCEPT_ID = c2.concept_id
-LEFT JOIN public.concept_ancestor ca3 ON c2.concept_id = ca3.DESCENDANT_CONCEPT_ID AND ca3.min_levels_of_separation = 1
-LEFT JOIN public.concept c3 ON ca3.ANCESTOR_CONCEPT_ID = c3.concept_id
+LEFT JOIN cdm_magu.concept_ancestor ca1 ON obs.concept_id = ca1.DESCENDANT_CONCEPT_ID AND ca1.min_levels_of_separation = 1
+LEFT JOIN cdm_magu.concept c1 ON ca1.ANCESTOR_CONCEPT_ID = c1.concept_id
+LEFT JOIN cdm_magu.concept_ancestor ca2 ON c1.concept_id = ca2.DESCENDANT_CONCEPT_ID AND ca2.min_levels_of_separation = 1
+LEFT JOIN cdm_magu.concept c2 ON ca2.ANCESTOR_CONCEPT_ID = c2.concept_id
+LEFT JOIN cdm_magu.concept_ancestor ca3 ON c2.concept_id = ca3.DESCENDANT_CONCEPT_ID AND ca3.min_levels_of_separation = 1
+LEFT JOIN cdm_magu.concept c3 ON ca3.ANCESTOR_CONCEPT_ID = c3.concept_id
 GROUP BY obs.concept_id, obs.concept_name;
 
 /********** PROCEDURE **********/
@@ -1100,21 +1100,21 @@ FROM
 	SELECT
 		c1.concept_id,
 		CONCAT(v1.vocabulary_name, ' ', c1.concept_code, ': ', c1.concept_name) AS proc_concept_name
-	FROM public.concept c1
-	INNER JOIN public.vocabulary v1 ON c1.vocabulary_id = v1.vocabulary_id
+	FROM cdm_magu.concept c1
+	INNER JOIN cdm_magu.vocabulary v1 ON c1.vocabulary_id = v1.vocabulary_id
 	WHERE c1.domain_id = 'Procedure'
 ) procs
 LEFT JOIN (
 	SELECT
 		ca0.DESCENDANT_CONCEPT_ID,
 		max(ca0.ancestor_concept_id) AS ancestor_concept_id
-	FROM public.concept_ancestor ca0
+	FROM cdm_magu.concept_ancestor ca0
 	INNER JOIN (
 		SELECT DISTINCT c2.concept_id AS os3_concept_id
-		FROM public.concept_ancestor ca1
-		INNER JOIN public.concept c1 ON ca1.DESCENDANT_CONCEPT_ID = c1.concept_id
-		INNER JOIN public.concept_ancestor ca2 ON c1.concept_id = ca2.ANCESTOR_CONCEPT_ID
-		INNER JOIN public.concept c2 ON ca2.DESCENDANT_CONCEPT_ID = c2.concept_id
+		FROM cdm_magu.concept_ancestor ca1
+		INNER JOIN cdm_magu.concept c1 ON ca1.DESCENDANT_CONCEPT_ID = c1.concept_id
+		INNER JOIN cdm_magu.concept_ancestor ca2 ON c1.concept_id = ca2.ANCESTOR_CONCEPT_ID
+		INNER JOIN cdm_magu.concept c2 ON ca2.DESCENDANT_CONCEPT_ID = c2.concept_id
 		WHERE ca1.ancestor_concept_id = 4040390
 			AND ca1.Min_LEVELS_OF_SEPARATION = 2
 			AND ca2.MIN_LEVELS_OF_SEPARATION = 1
@@ -1131,8 +1131,8 @@ LEFT JOIN (
 		SELECT
 			DESCENDANT_CONCEPT_ID AS os1_concept_id,
 			concept_name          AS os1_concept_name
-		FROM public.concept_ancestor ca1
-		INNER JOIN public.concept c1 ON ca1.DESCENDANT_CONCEPT_ID = c1.concept_id
+		FROM cdm_magu.concept_ancestor ca1
+		INNER JOIN cdm_magu.concept c1 ON ca1.DESCENDANT_CONCEPT_ID = c1.concept_id
 		WHERE ancestor_concept_id = 4040390
 			AND Min_LEVELS_OF_SEPARATION = 1
 	) proc_by_os1
@@ -1141,10 +1141,10 @@ LEFT JOIN (
 			max(c1.CONCEPT_ID) AS os1_concept_id,
 			c2.concept_id      AS os2_concept_id,
 			c2.concept_name    AS os2_concept_name
-		FROM public.concept_ancestor ca1
-		INNER JOIN public.concept c1 ON ca1.DESCENDANT_CONCEPT_ID = c1.concept_id
-		INNER JOIN public.concept_ancestor ca2 ON c1.concept_id = ca2.ANCESTOR_CONCEPT_ID
-		INNER JOIN public.concept c2 ON ca2.DESCENDANT_CONCEPT_ID = c2.concept_id
+		FROM cdm_magu.concept_ancestor ca1
+		INNER JOIN cdm_magu.concept c1 ON ca1.DESCENDANT_CONCEPT_ID = c1.concept_id
+		INNER JOIN cdm_magu.concept_ancestor ca2 ON c1.concept_id = ca2.ANCESTOR_CONCEPT_ID
+		INNER JOIN cdm_magu.concept c2 ON ca2.DESCENDANT_CONCEPT_ID = c2.concept_id
 		WHERE ca1.ancestor_concept_id = 4040390
 			AND ca1.Min_LEVELS_OF_SEPARATION = 1
 			AND ca2.MIN_LEVELS_OF_SEPARATION = 1
@@ -1155,10 +1155,10 @@ LEFT JOIN (
 			max(c1.CONCEPT_ID) AS os2_concept_id,
 			c2.concept_id      AS os3_concept_id,
 			c2.concept_name    AS os3_concept_name
-		FROM public.concept_ancestor ca1
-		INNER JOIN public.concept c1 ON ca1.DESCENDANT_CONCEPT_ID = c1.concept_id
-		INNER JOIN public.concept_ancestor ca2 ON c1.concept_id = ca2.ANCESTOR_CONCEPT_ID
-		INNER JOIN public.concept c2 ON ca2.DESCENDANT_CONCEPT_ID = c2.concept_id
+		FROM cdm_magu.concept_ancestor ca1
+		INNER JOIN cdm_magu.concept c1 ON ca1.DESCENDANT_CONCEPT_ID = c1.concept_id
+		INNER JOIN cdm_magu.concept_ancestor ca2 ON c1.concept_id = ca2.ANCESTOR_CONCEPT_ID
+		INNER JOIN cdm_magu.concept c2 ON ca2.DESCENDANT_CONCEPT_ID = c2.concept_id
 		WHERE ca1.ancestor_concept_id = 4040390
 			AND ca1.Min_LEVELS_OF_SEPARATION = 2
 			AND ca2.MIN_LEVELS_OF_SEPARATION = 1
@@ -3254,7 +3254,7 @@ CREATE INDEX idx_cohort_sample_element_rank ON magu_results.cohort_sample_elemen
 CREATE INDEX idx_pathway_events_combo_id ON magu_results.pathway_analysis_events (combo_id);
 END;
 
----WEBAPI SCRIPT 
+---WEBAPI SCRIPT --docker postgres
 ---CDM
 BEGIN;
 INSERT INTO webapi.source_daimon (

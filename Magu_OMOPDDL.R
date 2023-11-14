@@ -22,7 +22,7 @@ CommonDataModel::buildRelease(cdmVersions = "5.4",
 #If you have an empty schema ready to go, the package will connect and instantiate the tables for you. 
 #To start, you need to download DatabaseConnector in order to connect to your database.
 
-install.packages("DatabaseConnector")
+#install.packages("DatabaseConnector")
 library(DatabaseConnector)
 #set JDBC drivers
 Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = "c:/temp/jdbcDrivers")
@@ -32,7 +32,7 @@ Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = "c:/temp/jdbcDrivers")
 extraSettings <- ";databaseName=alpha;integratedSecurity=false;encrypt=false;trustServerCertificate=true;sslProtocol=TLSv1"
 
 cd <- DatabaseConnector::createConnectionDetails(dbms = "postgresql",
-                                                 server = "localhost/alpha",   #DATABASE NAME / CREATE DB USING PSQL SHELL
+                                                 server = "localhost/magu_cdm",   #DATABASE NAME / CREATE DB USING PSQL SHELL
                                                  user = "postgres",
                                                  password = "aphrc",
                                                  pathToDriver = "c:/temp/jdbcDrivers",
@@ -42,7 +42,7 @@ conn <- connect(cd)
 
 CommonDataModel::executeDdl(connectionDetails = cd,
                             cdmVersion = "5.4",
-                            cdmDatabaseSchema = "public"
+                            cdmDatabaseSchema = "cdm_magu"
 )
  
 
